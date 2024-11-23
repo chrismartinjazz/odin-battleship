@@ -4,7 +4,7 @@
   "description": "A browser-based version of battleship made for The Odin Project",
   "main": "main.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "repository": {
     "type": "git",
