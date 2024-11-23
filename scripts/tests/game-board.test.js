@@ -1,5 +1,6 @@
 import { describe, it, expect } from "@jest/globals";
 import { GameBoard } from "../game-board";
+import { Coordinate } from "../coordinate";
 
 it("creates an object", () => {
   const myGameBoard = new GameBoard(10);
@@ -7,59 +8,76 @@ it("creates an object", () => {
 });
 
 describe("placeShip", () => {
+  let myGameBoard = new GameBoard(10);
+  let expectedResult = [new Coordinate(0, 0), new Coordinate(0, 1)];
+
   it("can place a ship in the top corner", () => {
-    const myGameBoard = new GameBoard(10);
-    myGameBoard.placeShip([0, 0], [0, 1], 2);
-    expect(myGameBoard.shipCoordinates).toEqual([
-      [0, 0],
-      [0, 1],
-    ]);
+    myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
+    expect(myGameBoard.shipCoordinates).toEqual(expectedResult);
     console.log(myGameBoard.ships);
   });
 
   it("returns false if attempt to place a ship on same square", () => {
-    const myGameBoard = new GameBoard(10);
-    expect(myGameBoard.placeShip([0, 0], [0, 1], 2)).toBe(true);
-    expect(myGameBoard.placeShip([0, 0], [1, 0], 2)).toBe(false);
-    expect(myGameBoard.shipCoordinates).toEqual([
-      [0, 0],
-      [0, 1],
-    ]);
+    expect(
+      myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(1, 0), 2),
+    ).toBe(false);
+    expect(myGameBoard.shipCoordinates).toEqual(expectedResult);
   });
 
   it("returns false if attempt to place a ship off the board", () => {
-    const myGameBoard = new GameBoard(10);
-    expect(myGameBoard.placeShip([0, 0], [0, -1], 2)).toBe(false);
-    expect(myGameBoard.placeShip([0, 0], [0, -1], 2)).toBe(false);
-    expect(myGameBoard.shipCoordinates).toEqual([]);
+    expect(
+      myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, -1), 2),
+    ).toBe(false);
+    expect(myGameBoard.shipCoordinates).toEqual(expectedResult);
   });
 
   it("can place all ships on the board, creating the ships and recording their positions", () => {
-    const myGameBoard = new GameBoard(10);
-    myGameBoard.placeShip([0, 0], [0, 1], 5);
-    myGameBoard.placeShip([2, 3], [1, 0], 4);
-    myGameBoard.placeShip([8, 4], [0, 1], 3);
-    myGameBoard.placeShip([3, 8], [1, 0], 3);
-    myGameBoard.placeShip([10, 9], [0, 1], 2);
-    expect(myGameBoard.shipCoordinates).toEqual([
-      [0, 0],
-      [0, 1],
-      [0, 2],
-      [0, 3],
-      [0, 4],
-      [2, 3],
-      [3, 3],
-      [4, 3],
-      [5, 3],
-      [8, 4],
-      [8, 5],
-      [8, 6],
-      [3, 8],
-      [4, 8],
-      [5, 8],
-      [10, 9],
-      [10, 10],
-    ]);
+    myGameBoard = new GameBoard(10);
+    expectedResult = [
+      new Coordinate(0, 0),
+      new Coordinate(0, 1),
+      new Coordinate(0, 2),
+      new Coordinate(0, 3),
+      new Coordinate(0, 4),
+      new Coordinate(2, 3),
+      new Coordinate(3, 3),
+      new Coordinate(4, 3),
+      new Coordinate(5, 3),
+      new Coordinate(8, 4),
+      new Coordinate(8, 5),
+      new Coordinate(8, 6),
+      new Coordinate(3, 8),
+      new Coordinate(4, 8),
+      new Coordinate(5, 8),
+      new Coordinate(10, 9),
+      new Coordinate(10, 10),
+    ];
+    myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 5);
+    myGameBoard.placeShip(new Coordinate(2, 3), new Coordinate(1, 0), 4);
+    myGameBoard.placeShip(new Coordinate(8, 4), new Coordinate(0, 1), 3);
+    myGameBoard.placeShip(new Coordinate(3, 8), new Coordinate(1, 0), 3);
+    myGameBoard.placeShip(new Coordinate(10, 9), new Coordinate(0, 1), 2);
     expect(myGameBoard.ships.length).toBe(5);
+    expect(myGameBoard.shipCoordinates).toEqual(expectedResult);
   });
+});
+
+describe("receiveAttack", () => {
+  const myGameBoard = new GameBoard(10);
+  myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
+  // myGameBoard has 1 ship at (0, 0) and at (0, 1)
+
+  it("returns 'hit' if the attack hit a ship", () => {
+    expect(myGameBoard.receiveAttack(new Coordinate(0, 0))).toBe("hit");
+  });
+
+  it.skip("returns 'miss' if the attack hit no ships", () => {
+    expect(myGameBoard.receiveAttack(new Coordinate(0, 2))).toBe("miss");
+  });
+
+  it.todo("adds the coordinates to this.hitsReceived ");
+  it.todo(
+    "doesn't add the coordinates to this.hitsReceived if they are already on that list",
+  );
+  it.todo("");
 });

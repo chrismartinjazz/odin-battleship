@@ -1,5 +1,5 @@
 import { Ship } from "./ship";
-import { calculateShipCoordinates } from "./calculate-ship-coordinates";
+import { generateCoordinateLine, validateCoordinates } from "./coordinate";
 
 export class GameBoard {
   constructor(size) {
@@ -11,38 +11,19 @@ export class GameBoard {
   }
 
   placeShip(startingCoordinate, directionVector, length) {
-    const coordinates = calculateShipCoordinates(
+    const newCoordinates = generateCoordinateLine(
       startingCoordinate,
       directionVector,
       length,
     );
-    if (this.validateCoordinates(coordinates)) {
-      this.addCoordinates(coordinates);
+    if (validateCoordinates(this.shipCoordinates, newCoordinates, this.size)) {
+      this.addCoordinates(newCoordinates);
       const ship = new Ship(length);
-      this.ships.push([ship, coordinates]);
+      this.ships.push([ship, newCoordinates]);
       return true;
     } else {
       return false;
     }
-  }
-
-  validateCoordinates(coordinates) {
-    let checkString = "";
-    for (const coordinate of this.shipCoordinates) {
-      checkString += `|${coordinate.toString()}`;
-    }
-
-    for (let i = 0; i < coordinates.length; i++) {
-      if (checkString.includes(coordinates[i].toString())) return false;
-      if (
-        coordinates[i][0] < 0 ||
-        coordinates[i][1] < 0 ||
-        coordinates[i][0] > this.size ||
-        coordinates[i][1] > this.size
-      )
-        return false;
-    }
-    return true;
   }
 
   addCoordinates(coordinates) {
@@ -51,5 +32,8 @@ export class GameBoard {
     }
   }
 
-  receiveAttack() {}
+  receiveAttack(coordinate) {
+    // If the coordinate matches any ship's coordinates,
+    return "hit";
+  }
 }
