@@ -14,7 +14,6 @@ describe("placeShip", () => {
   it("can place a ship in the top corner", () => {
     myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
     expect(myGameBoard.shipCoordinates).toEqual(expectedResult);
-    console.log(myGameBoard.ships);
   });
 
   it("returns false if attempt to place a ship on same square", () => {
@@ -62,6 +61,14 @@ describe("placeShip", () => {
   });
 });
 
+describe("findShip", () => {
+  const myGameBoard = new GameBoard(10);
+  myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
+  it("returns a ship when called with a valid coordinate", () => {
+    expect(typeof myGameBoard.findShip(new Coordinate(0, 0))).toBe("object");
+  });
+});
+
 describe("receiveAttack", () => {
   const myGameBoard = new GameBoard(10);
   myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
@@ -71,13 +78,70 @@ describe("receiveAttack", () => {
     expect(myGameBoard.receiveAttack(new Coordinate(0, 0))).toBe("hit");
   });
 
-  it.skip("returns 'miss' if the attack hit no ships", () => {
+  it("adds the coordinates to GameBoard's hitsReceived", () => {
+    expect(myGameBoard.hitsReceived).toEqual([new Coordinate(0, 0)]);
+  });
+
+  it("returns 'miss' if the attack hit no ships", () => {
     expect(myGameBoard.receiveAttack(new Coordinate(0, 2))).toBe("miss");
   });
 
-  it.todo("adds the coordinates to this.hitsReceived ");
-  it.todo(
-    "doesn't add the coordinates to this.hitsReceived if they are already on that list",
-  );
-  it.todo("");
+  it("returns 'miss' if attacking a square that has already been 'hit' and doesn't change receivedHits", () => {
+    expect(myGameBoard.receiveAttack(new Coordinate(0, 0))).toBe("miss");
+    expect(myGameBoard.hitsReceived).toEqual([new Coordinate(0, 0)]);
+  });
+
+  it("sends a message to the correct ship when there is only one ship", () => {
+    expect(myGameBoard.ships[0].ship.hits).toBe(1);
+  });
+
+  myGameBoard.placeShip(new Coordinate(1, 0), new Coordinate(0, 1), 2);
+
+  it("sends a message to the correct ship when there is more that one ship", () => {
+    myGameBoard.receiveAttack(new Coordinate(1, 1));
+    expect(myGameBoard.ships[1].ship.hits).toBe(1);
+  });
+});
+
+describe("shipsSunk", () => {
+  const myGameBoard = new GameBoard(10);
+  myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
+
+  it("is 0 when no ships are sunk", () => {
+    expect(myGameBoard.shipsSunk()).toBe(0);
+  });
+
+  it("is not affected by a hit on a ship, that did not sink a ship", () => {
+    myGameBoard.receiveAttack(new Coordinate(0, 0));
+    expect(myGameBoard.shipsSunk()).toBe(0);
+  });
+
+  it("is 1 if 1 ship has been sunk", () => {
+    myGameBoard.receiveAttack(new Coordinate(0, 1));
+    expect(myGameBoard.shipsSunk()).toBe(1);
+  });
+
+  it("is still 1 if an already sunk ship is attacked", () => {
+    myGameBoard.receiveAttack(new Coordinate(0, 1));
+    expect(myGameBoard.shipsSunk()).toBe(1);
+  });
+});
+
+describe("allShipsSunk", () => {
+  const myGameBoard = new GameBoard(10);
+  myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
+
+  it("is false initially", () => {
+    expect(myGameBoard.allShipsSunk()).toBe(false);
+  });
+
+  it("is unchanged if a ship is hit, but not sunk", () => {
+    myGameBoard.receiveAttack(new Coordinate(0, 0));
+    expect(myGameBoard.allShipsSunk()).toBe(false);
+  });
+
+  it("if true if all ships have been sunk", () => {
+    myGameBoard.receiveAttack(new Coordinate(0, 1));
+    expect(myGameBoard.allShipsSunk()).toBe(true);
+  });
 });
