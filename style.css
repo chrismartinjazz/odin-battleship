@@ -1,0 +1,26 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.row {
+  display: flex;
+}
+
+.col {
+  width: 100%;
+}
+
+.cell {
+  width: 2em;
+  height: 2em;
+  border: solid black 1px;
+}
+
+.cell:hover {
+  border: solid limegreen 1px;
+  cursor: pointer;
+}

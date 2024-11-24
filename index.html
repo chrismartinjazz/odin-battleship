@@ -1,11 +1,115 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Odin Battleship</title>
-</head>
-<body>
-  <script src="./scripts/main.js" type="module"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odin's Battleship</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Odin's Battleship</h1>
+    <div class="row">
+      <div class="col player-one">
+        <h2>playerOne</h2>
+
+        <div class="p1-opponent-ships">
+          <h3>p1OpponentShips</h3>
+          <ul>
+            <li>Carrier</li>
+            <li>Battleship</li>
+            <li>Destroyer</li>
+            <li>Submarine</li>
+            <li>Patrol Boat</li>
+          </ul>
+        </div>
+
+        <div class="p1-opponent-board">
+          <h3>p1OpponentBoard</h3>
+          <div class="row header">
+            <div class="cell"></div>
+            <div class="cell header">A</div>
+            <div class="cell header">B</div>
+            <div class="cell header">C</div>
+          </div>
+          <div class="row">
+            <div class="cell header">1</div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+          <div class="row">
+            <div class="cell header">2</div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+          <div class="row">
+            <div class="cell header">3</div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+        </div>
+
+        <div class="p1-move-list">
+          <h3>p1MoveList</h3>
+        </div>
+
+        <div class="p1-board">
+          <h3>p1Board</h3>
+        </div>
+      </div>
+      <div class="col player-two">
+        <h2>playerTwo</h2>
+
+        <div class="p2-opponent-ships">
+          <h3>p2OpponentShips</h3>
+          <ul>
+            <li>Carrier</li>
+            <li>Battleship</li>
+            <li>Destroyer</li>
+            <li>Submarine</li>
+            <li>Patrol Boat</li>
+          </ul>
+        </div>
+
+        <div class="p2-opponent-board">
+          <h3>p2OpponentBoard</h3>
+          <div class="row header">
+            <div class="cell"></div>
+            <div class="cell header">A</div>
+            <div class="cell header">B</div>
+            <div class="cell header">C</div>
+          </div>
+          <div class="row">
+            <div class="cell header">1</div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+          <div class="row">
+            <div class="cell header">2</div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+          <div class="row">
+            <div class="cell header">3</div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+        </div>
+
+        <div class="p2-move-list">
+          <h3>p2MoveList</h3>
+        </div>
+
+        <div class="p2-board">
+          <h3>p2Board</h3>
+        </div>
+      </div>
+    </div>
+    <script src="./scripts/main.js" type="module"></script>
+  </body>
 </html>
