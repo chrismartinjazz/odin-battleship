@@ -61,11 +61,13 @@ describe("placeShip", () => {
   });
 });
 
-describe("findShip", () => {
+describe("findShipAndIndex", () => {
   const myGameBoard = new GameBoard(10);
   myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
   it("returns a ship when called with a valid coordinate", () => {
-    expect(typeof myGameBoard.findShip(new Coordinate(0, 0))).toBe("object");
+    expect(typeof myGameBoard.findShipAndIndex(new Coordinate(0, 0))).toBe(
+      "object",
+    );
   });
 });
 
@@ -75,7 +77,7 @@ describe("receiveAttack", () => {
   // myGameBoard has 1 ship at (0, 0) and at (0, 1)
 
   it("returns 'hit' if the attack hit a ship", () => {
-    expect(myGameBoard.receiveAttack(new Coordinate(0, 0))).toBe("hit");
+    expect(myGameBoard.receiveAttack(new Coordinate(0, 0)).result).toBe("hit");
   });
 
   it("adds the coordinates to GameBoard's hitsReceived", () => {
@@ -83,11 +85,11 @@ describe("receiveAttack", () => {
   });
 
   it("returns 'miss' if the attack hit no ships", () => {
-    expect(myGameBoard.receiveAttack(new Coordinate(0, 2))).toBe("miss");
+    expect(myGameBoard.receiveAttack(new Coordinate(0, 2)).result).toBe("miss");
   });
 
-  it("returns 'miss' if attacking a square that has already been 'hit' and doesn't change receivedHits", () => {
-    expect(myGameBoard.receiveAttack(new Coordinate(0, 0))).toBe("miss");
+  it("returns undefined if attacking a square that has already been 'hit' and doesn't change receivedHits", () => {
+    expect(myGameBoard.receiveAttack(new Coordinate(0, 0))).toBe(undefined);
     expect(myGameBoard.hitsReceived).toEqual([new Coordinate(0, 0)]);
   });
 

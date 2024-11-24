@@ -1,5 +1,5 @@
-import { Ship } from "./ship";
-import { generateCoordinateLine, validateCoordinates } from "./coordinate";
+import { Ship } from "./ship.js";
+import { generateCoordinateLine, validateCoordinates } from "./coordinate.js";
 
 export class GameBoard {
   constructor(size) {
@@ -8,7 +8,6 @@ export class GameBoard {
     this.shipCoordinates = [];
     this.hitsReceived = [];
     this.missesReceived = [];
-    this.shotsFired = [];
   }
 
   placeShip(startingCoordinate, directionVector, length) {
@@ -34,22 +33,35 @@ export class GameBoard {
   }
 
   receiveAttack(coordinate) {
-    const ship = this.findShip(coordinate);
-    if (ship && !coordinate.isInList(this.hitsReceived)) {
-      ship.hit();
-      this.hitsReceived.push(coordinate);
-      return "hit";
-    }
-    if (!coordinate.isInList(this.missesReceived)) {
+    /* 
+    Check if a coordinate is valid (has not already been recorded, not off the
+    board). Return undefined if invalid. 'Hit' a ship if appropriate and return
+    a record of results.
+    */
+    if (
+      validateCoordinates(
+        this.hitsReceived.concat(this.missesReceived),
+        [coordinate],
+        this.size,
+      )
+    ) {
+      const shipAndIndex = this.findShipAndIndex(coordinate);
+      if (shipAndIndex) {
+        shipAndIndex.ship.hit();
+        this.hitsReceived.push(coordinate);
+        const sunk = shipAndIndex.ship.isSunk() ? shipAndIndex.index : null;
+        return { coordinate, result: "hit", sunk };
+      }
       this.missesReceived.push(coordinate);
+      return { coordinate, result: "miss", sunk: null };
     }
-    return "miss";
+    return;
   }
 
-  findShip(coordinate) {
+  findShipAndIndex(coordinate) {
     for (let i = 0; i < this.ships.length; i++) {
       if (coordinate.isInList(this.ships[i].coordinates)) {
-        return this.ships[i].ship;
+        return { ship: this.ships[i].ship, index: i };
       }
     }
     return false;
