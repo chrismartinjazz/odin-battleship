@@ -1,15 +1,20 @@
 export class Coordinate {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
+  constructor(row, col) {
+    this.row = row;
+    this.col = col;
   }
 
   isEqual(otherCoordinate) {
-    return this.x === otherCoordinate.x && this.y === otherCoordinate.y;
+    return this.row === otherCoordinate.row && this.col === otherCoordinate.col;
   }
 
-  isInRange(xMin, xMax, yMin, yMax) {
-    return xMin <= this.x && this.x <= xMax && yMin <= this.y && this.y <= yMax;
+  isInRange(rowMin, rowMax, colMin, colMax) {
+    return (
+      rowMin <= this.row &&
+      this.row <= rowMax &&
+      colMin <= this.col &&
+      this.col <= colMax
+    );
   }
 
   isInList(list) {
@@ -17,7 +22,7 @@ export class Coordinate {
   }
 
   addVector(vector) {
-    return new Coordinate(this.x + vector.x, this.y + vector.y);
+    return new Coordinate(this.row + vector.row, this.col + vector.col);
   }
 }
 
