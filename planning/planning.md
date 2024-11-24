@@ -152,21 +152,30 @@ Either way a calcShipCoordinates method sounds useful.
 
 - parameters: starting coordinates, direction vector, length.
 
-
-```txt
-  [-1, 0]
-[0, -1] [0, 1]
-  [1, 0]
-```
-
 ### Player
 
 Can be human or computer. Use basic class inheritance for this.
 
-- makeMove(coordinates)
 - Holds a GameBoard object.
+- AI player can selectMove() based on its own GameBoard state.
 
 ### Application
 
-- shipNames: Names and lengths of ships for initialization purposes
+- shipNames: Names and lengths of ships for initialization purposes.
 - Holds the Player objects.
+- Manages the game sequence.
+
+## Pseudocode
+
+- Initialize Application
+- Initialize Player 1 and Player 2
+  - testing: both human
+- Place ships on boards
+  - testing: pre-determined
+- Set player 1 as active player
+- Each turn:
+  - Active player selects square to attack
+  - Inactive player reports on result of attack
+  - Active player records result of attack
+  - If all ships are sunk for inactive player, game is over
+  - Otherwise, rotate turn.
