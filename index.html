@@ -12,9 +12,9 @@
       <div class="col player-one">
         <h2>playerOne</h2>
 
-        <div class="p1-opponent-ships">
+        <div>
           <h3>p1OpponentShips</h3>
-          <ul>
+          <ul class="p1-opponent-ships">
             <li>Carrier</li>
             <li>Battleship</li>
             <li>Destroyer</li>
@@ -23,8 +23,8 @@
           </ul>
         </div>
 
+        <h3>p1OpponentBoard</h3>
         <div class="p1-opponent-board">
-          <h3>p1OpponentBoard</h3>
           <div class="row header">
             <div class="cell"></div>
             <div class="cell header">A</div>
@@ -33,38 +33,61 @@
           </div>
           <div class="row">
             <div class="cell header">1</div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
+            <div class="cell hit" data-row="0" data-col="0"></div>
+            <div class="cell miss" data-row="0" data-col="1"></div>
+            <div class="cell clickable" data-row="0" data-col="2"></div>
           </div>
           <div class="row">
             <div class="cell header">2</div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
+            <div class="cell clickable" data-row="1" data-col="0"></div>
+            <div class="cell clickable" data-row="1" data-col="1"></div>
+            <div class="cell clickable" data-row="1" data-col="2"></div>
           </div>
           <div class="row">
             <div class="cell header">3</div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
+            <div class="cell clickable" data-row="2" data-col="0"></div>
+            <div class="cell clickable" data-row="2" data-col="1"></div>
+            <div class="cell clickable" data-row="2" data-col="2"></div>
           </div>
         </div>
 
-        <div class="p1-move-list">
-          <h3>p1MoveList</h3>
-        </div>
+        <h3>p1MoveList</h3>
+        <div class="p1-move-list"></div>
 
+        <h3>p1Board</h3>
         <div class="p1-board">
-          <h3>p1Board</h3>
+          <div class="row header">
+            <div class="cell"></div>
+            <div class="cell header">A</div>
+            <div class="cell header">B</div>
+            <div class="cell header">C</div>
+          </div>
+          <div class="row">
+            <div class="cell header">1</div>
+            <div class="cell" data-row="0" data-col="0"></div>
+            <div class="cell" data-row="0" data-col="1"></div>
+            <div class="cell" data-row="0" data-col="2"></div>
+          </div>
+          <div class="row">
+            <div class="cell header">2</div>
+            <div class="cell" data-row="1" data-col="0"></div>
+            <div class="cell ship" data-row="1" data-col="1"></div>
+            <div class="cell ship" data-row="1" data-col="2"></div>
+          </div>
+          <div class="row">
+            <div class="cell header">3</div>
+            <div class="cell" data-row="2" data-col="0"></div>
+            <div class="cell" data-row="2" data-col="1"></div>
+            <div class="cell" data-row="2" data-col="2"></div>
+          </div>
         </div>
       </div>
       <div class="col player-two">
         <h2>playerTwo</h2>
 
-        <div class="p2-opponent-ships">
+        <div>
           <h3>p2OpponentShips</h3>
-          <ul>
+          <ul class="p2-opponent-ships">
             <li>Carrier</li>
             <li>Battleship</li>
             <li>Destroyer</li>
@@ -83,21 +106,21 @@
           </div>
           <div class="row">
             <div class="cell header">1</div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
+            <div class="cell" data-row="0" data-col="0"></div>
+            <div class="cell" data-row="0" data-col="1"></div>
+            <div class="cell" data-row="0" data-col="2"></div>
           </div>
           <div class="row">
             <div class="cell header">2</div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
+            <div class="cell" data-row="1" data-col="0"></div>
+            <div class="cell" data-row="1" data-col="1"></div>
+            <div class="cell" data-row="1" data-col="2"></div>
           </div>
           <div class="row">
             <div class="cell header">3</div>
-            <div class="cell"></div>
-            <div class="cell"></div>
-            <div class="cell"></div>
+            <div class="cell" data-row="2" data-col="0"></div>
+            <div class="cell" data-row="2" data-col="1"></div>
+            <div class="cell" data-row="2" data-col="2"></div>
           </div>
         </div>
 

@@ -2,7 +2,17 @@
   box-sizing: border-box;
 }
 
+:root {
+  --color-light: #e3eae8;
+  --color-dark: #152d5c;
+  --color-highlight: #dac62f;
+  --color-hit: #f43631;
+  --color-ship: #8fa29a;
+}
+
 body {
+  background-color: var(--color-dark);
+  color: var(--color-light);
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -20,7 +30,23 @@ body {
   border: solid black 1px;
 }
 
-.cell:hover {
-  border: solid limegreen 1px;
+.clickable:hover {
+  border: solid var(--color-highlight) 2px;
   cursor: pointer;
+}
+
+.cell.hit {
+  background-color: var(--color-hit);
+}
+
+.cell.miss {
+  background-color: var(--color-light);
+}
+
+.cell.ship {
+  background-color: var(--color-ship);
+}
+
+.p1-opponent-board > .row > .cell[data-row="0"][data-col="0"] {
+  background-color: red;
 }

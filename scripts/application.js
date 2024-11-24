@@ -15,14 +15,17 @@ export class Application {
   ) {
     this.size = size;
     this.shipDetails = shipDetails;
-    this.display = new Display();
     this.playerOne = new Player(size);
     this.playerTwo = new Player(size);
     this.currentPlayer = this.playerOne;
+    this.display = new Display(
+      this.size,
+      this.shipDetails,
+      this.playerOne,
+      this.playerTwo,
+    );
 
-    // this.testGameLoop();
-    this.testPlaceShips(this.playerOne);
-    this.testPlaceShips(this.playerTwo);
+    this.testGameLoop();
   }
 
   fireShot(firingPlayer, receivingPlayer, coordinate) {
@@ -52,21 +55,35 @@ export class Application {
       new Coordinate(0, 6),
       new Coordinate(0, 7),
       new Coordinate(0, 8),
-      new Coordinate(0, 11),
-      new Coordinate(0, 12),
-      new Coordinate(1, 0),
-      new Coordinate(1, 1),
-      new Coordinate(1, 2),
-      new Coordinate(1, 3),
-      new Coordinate(2, 0),
-      new Coordinate(2, 1),
-      new Coordinate(2, 2),
-      new Coordinate(3, 0),
-      new Coordinate(3, 1),
-      new Coordinate(3, 2),
-      new Coordinate(4, 0),
-      new Coordinate(4, 1),
     ];
+
+    // const attacks1 = [
+    //   new Coordinate(0, 0),
+    //   new Coordinate(0, 0),
+    //   new Coordinate(0, 0),
+    //   new Coordinate(0, 1),
+    //   new Coordinate(0, 2),
+    //   new Coordinate(0, 3),
+    //   new Coordinate(0, 4),
+    //   new Coordinate(0, 5),
+    //   new Coordinate(0, 6),
+    //   new Coordinate(0, 7),
+    //   new Coordinate(0, 8),
+    //   new Coordinate(0, 11),
+    //   new Coordinate(0, 12),
+    //   new Coordinate(1, 0),
+    //   new Coordinate(1, 1),
+    //   new Coordinate(1, 2),
+    //   new Coordinate(1, 3),
+    //   new Coordinate(2, 0),
+    //   new Coordinate(2, 1),
+    //   new Coordinate(2, 2),
+    //   new Coordinate(3, 0),
+    //   new Coordinate(3, 1),
+    //   new Coordinate(3, 2),
+    //   new Coordinate(4, 0),
+    //   new Coordinate(4, 1),
+    // ];
 
     this.testPlaceShips(this.playerOne);
     this.testPlaceShips(this.playerTwo);
