@@ -2,11 +2,10 @@ export class Ship {
   constructor(length) {
     this.length = length;
     this.hits = 0;
-    this.sunk = false;
   }
 
   hit() {
-    if (!this.sunk) {
+    if (!this.isSunk()) {
       this.hits += 1;
     }
   }
