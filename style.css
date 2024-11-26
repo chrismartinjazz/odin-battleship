@@ -47,6 +47,10 @@ body {
   background-color: var(--color-ship);
 }
 
+.cell.ship.hit {
+  background-color: var(--color-hit);
+}
+
 .cell.ship.sunk {
   background: url("./images/sunk.svg");
   background-repeat:no-repeat;

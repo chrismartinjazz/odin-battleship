@@ -25,23 +25,6 @@ export class Display {
     );
     this.initializeBoard(this.p1PlayerBoard, "p1-player-board", "cell");
     this.initializeBoard(this.p2PlayerBoard, "p2-player-board", "cell");
-    /*
-    Render 'opponent board' showing:
-      - Hit 🔴
-      - Miss ⚪
-    And allowing click to fire a shot.
-
-    Steps
-      - Initial board
-      - Build grid of hit, miss, null for each coordinate
-      - Render set of boxes with appropriate classes for hit/miss and for coordinate
-    */
-
-    /*
-    Render 'board' showing:
-    - Ship ❎
-    - Hit 🔴
-    */
   }
 
   initializeBoard(board, boardSelector, cellClasses) {
@@ -83,6 +66,7 @@ export class Display {
         `[data-board="${dataBoard}"][data-coordinate="${shot.coordinate.toString()}"]`,
       );
       cell.classList.add(shot.result);
+      cell.classList.remove("clickable");
     }
   }
 
@@ -99,6 +83,12 @@ export class Display {
       }
     }
     // Add hit and miss indicators to the player board
+    for (const shot of player.gameBoard.shotsReceived) {
+      const cell = document.querySelector(
+        `[data-board="${dataBoard}"][data-coordinate="${shot.coordinate.toString()}"]`,
+      );
+      cell.classList.add(shot.result);
+    }
   }
 
   makeElement(htmlTag = "div", cssClass, text) {
