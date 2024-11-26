@@ -179,3 +179,13 @@ Can be human or computer. Use basic class inheritance for this.
   - Active player records result of attack
   - If all ships are sunk for inactive player, game is over
   - Otherwise, rotate turn.
+
+Steps:
+
+- Rename 'p1Board' to... 'p1PlayerBoard'
+- Generate all 4 boards
+  - DONE p1OpponentBoard
+  - p2OpponentBoard
+  - p1PlayerBoard
+  - p2PlayerBoard
+- pub-sub events for shot fired so Application can respond

@@ -24,11 +24,24 @@ export class Application {
       this.playerOne,
       this.playerTwo,
     );
+    this.initializeEventListeners();
 
     // Just for testing - TODO remove
     this.testGameLoop();
     this.display.updateOpponentBoard(this.playerOne, "p1-opponent-board");
     this.display.updateOpponentBoard(this.playerTwo, "p2-opponent-board");
+    this.display.updatePlayerBoard(this.playerOne, "p1-player-board");
+    this.display.updatePlayerBoard(this.playerTwo, "p2-player-board");
+  }
+
+  initializeEventListeners() {
+    // Add event listener - TODO make this send an attack and toggle current player
+    this.display.p1OpponentBoard.addEventListener("click", (event) => {
+      console.log(event.target.getAttribute("data-coordinate"));
+    });
+    this.display.p2OpponentBoard.addEventListener("click", (event) => {
+      console.log(event.target.getAttribute("data-coordinate"));
+    });
   }
 
   fireShot(firingPlayer, receivingPlayer, coordinate) {

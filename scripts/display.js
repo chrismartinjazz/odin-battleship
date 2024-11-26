@@ -74,11 +74,6 @@ export class Display {
       }
       board.appendChild(myRow);
     }
-
-    // Add event listener - TODO make this send an attack and toggle current player
-    board.addEventListener("click", (event) => {
-      console.log(event.target.getAttribute("data-coordinate"));
-    });
   }
 
   updateOpponentBoard(player, dataBoard) {
@@ -92,7 +87,18 @@ export class Display {
   }
 
   updatePlayerBoard(player, dataBoard) {
-    // Add ship, hit and miss indicators to the player board
+    // Add 'ship' class to cells that have a ship, also 'sunk' if that ship is sunk.
+    for (const [shipIndex, shipRecord] of player.gameBoard.ships.entries()) {
+      for (const coordinate of shipRecord.coordinates) {
+        const cell = document.querySelector(
+          `[data-board="${dataBoard}"][data-coordinate="${coordinate.toString()}"]`,
+        );
+        cell.classList.add("ship");
+        cell.setAttribute("data-ship", shipIndex);
+        if (shipRecord.ship.isSunk()) cell.classList.add("sunk");
+      }
+    }
+    // Add hit and miss indicators to the player board
   }
 
   makeElement(htmlTag = "div", cssClass, text) {

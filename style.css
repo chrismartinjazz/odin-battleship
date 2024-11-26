@@ -47,6 +47,13 @@ body {
   background-color: var(--color-ship);
 }
 
+.cell.ship.sunk {
+  background: url("./images/sunk.svg");
+  background-repeat:no-repeat;
+  background-position:center center;
+  background-size: 100% 100%, auto;
+}
+
 .p1-opponent-board > .row > .cell[data-row="0"][data-col="0"] {
   background-color: red;
 }
