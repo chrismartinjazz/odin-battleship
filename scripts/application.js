@@ -36,7 +36,7 @@ export class Application {
     // The firing player updates their record of shots fired with the coordinates
     // and result (which can be "hit", "miss" or "error")
     const result = receivingPlayer.gameBoard.receiveAttack(coordinate);
-    if (result) firingPlayer.updateShotsFired(result);
+    if (result) firingPlayer.gameBoard.updateShotsFired(result);
     this.swapCurrentPlayer();
   }
 

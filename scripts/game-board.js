@@ -8,6 +8,7 @@ export class GameBoard {
     this.shipCoordinates = [];
     this.hitsReceived = [];
     this.missesReceived = [];
+    this.shotsFired = [];
   }
 
   placeShip(startingCoordinate, directionVector, length) {
@@ -30,6 +31,10 @@ export class GameBoard {
     for (const coordinate of coordinates) {
       this.shipCoordinates.push(coordinate);
     }
+  }
+
+  updateShotsFired({ coordinate, result }) {
+    this.shotsFired.push({ coordinate, result });
   }
 
   receiveAttack(coordinate) {

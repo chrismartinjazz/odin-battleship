@@ -83,7 +83,7 @@ export class Display {
 
   updateOpponentBoard(player, dataBoard) {
     // Add 'hit' or 'miss' class to cells that have been hit / missed
-    for (const shot of player.shotsFired) {
+    for (const shot of player.gameBoard.shotsFired) {
       const cell = document.querySelector(
         `[data-board="${dataBoard}"][data-coordinate="${shot.coordinate.toString()}"]`,
       );
@@ -94,6 +94,7 @@ export class Display {
   updatePlayerBoard(player, dataBoard) {
     // Add ship, hit and miss indicators to the player board
   }
+
   makeElement(htmlTag = "div", cssClass, text) {
     const myElement = document.createElement(htmlTag);
     if (cssClass) myElement.className = cssClass;
