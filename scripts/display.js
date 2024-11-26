@@ -7,13 +7,24 @@ export class Display {
     this.p1OpponentShips = document.querySelector(".p1-opponent-ships");
     this.p1OpponentBoard = document.querySelector(".p1-opponent-board");
     this.p1MoveList = document.querySelector(".p1-move-list");
-    this.p1Board = document.querySelector(".p1-board");
+    this.p1PlayerBoard = document.querySelector(".p1-player-board");
     this.p2OpponentShips = document.querySelector(".p2-opponent-ships");
     this.p2OpponentBoard = document.querySelector(".p2-opponent-board");
     this.p2MoveList = document.querySelector(".p2-move-list");
-    this.p2Board = document.querySelector(".p2-board");
+    this.p2PlayerBoard = document.querySelector(".p2-player-board");
 
-    this.initializeP1OpponentBoard();
+    this.initializeBoard(
+      this.p1OpponentBoard,
+      "p1-opponent-board",
+      "cell clickable",
+    );
+    this.initializeBoard(
+      this.p2OpponentBoard,
+      "p2-opponent-board",
+      "cell clickable",
+    );
+    this.initializeBoard(this.p1PlayerBoard, "p1-player-board", "cell");
+    this.initializeBoard(this.p2PlayerBoard, "p2-player-board", "cell");
     /*
     Render 'opponent board' showing:
       - Hit 🔴
@@ -33,8 +44,8 @@ export class Display {
     */
   }
 
-  initializeP1OpponentBoard() {
-    this.p1OpponentBoard.innerHTML = "";
+  initializeBoard(board, boardSelector, cellClasses) {
+    board.innerHTML = "";
 
     // Add header row
     const myRowHeader = this.makeElement("div", "row header");
@@ -44,7 +55,7 @@ export class Display {
         this.makeElement("div", "cell header", String.fromCharCode(col + 65)),
       );
     }
-    this.p1OpponentBoard.appendChild(myRowHeader);
+    board.appendChild(myRowHeader);
 
     // Add body rows
     for (let row = 0; row < this.size; row++) {
@@ -53,29 +64,36 @@ export class Display {
         this.makeElement("div", "cell header", (row + 1).toString()),
       );
       for (let col = 0; col < this.size; col++) {
-        const myCell = this.makeElement("div", "cell clickable");
-        myCell.setAttribute("data-row", row.toString());
-        myCell.setAttribute("data-col", col.toString());
+        const myCell = this.makeElement("div", cellClasses);
+        myCell.setAttribute(
+          "data-coordinate",
+          `${row.toString()},${col.toString()}`,
+        );
+        myCell.setAttribute("data-board", boardSelector);
         myRow.appendChild(myCell);
       }
-      this.p1OpponentBoard.appendChild(myRow);
+      board.appendChild(myRow);
     }
 
     // Add event listener - TODO make this send an attack and toggle current player
-    this.p1OpponentBoard.addEventListener("click", (event) => {
-      console.log(event.target.getAttribute("data-row"));
-      console.log(event.target.getAttribute("data-col"));
+    board.addEventListener("click", (event) => {
+      console.log(event.target.getAttribute("data-coordinate"));
     });
   }
 
-  updateP1OpponentBoard() {
-    // for (const hit in this.p1.gameBoard.hitsReceived) {
-    //   const cell = document.querySelector(
-    //     `.p1-opponent-board>.row>.cell[data-row="${hit.row}"][data-col="${hit.col}]`,
-    //   );
-    // }
+  updateOpponentBoard(player, dataBoard) {
+    // Add 'hit' or 'miss' class to cells that have been hit / missed
+    for (const shot of player.shotsFired) {
+      const cell = document.querySelector(
+        `[data-board="${dataBoard}"][data-coordinate="${shot.coordinate.toString()}"]`,
+      );
+      cell.classList.add(shot.result);
+    }
   }
 
+  updatePlayerBoard(player, dataBoard) {
+    // Add ship, hit and miss indicators to the player board
+  }
   makeElement(htmlTag = "div", cssClass, text) {
     const myElement = document.createElement(htmlTag);
     if (cssClass) myElement.className = cssClass;

@@ -33,29 +33,29 @@
           </div>
           <div class="row">
             <div class="cell header">1</div>
-            <div class="cell hit" data-row="0" data-col="0"></div>
-            <div class="cell miss" data-row="0" data-col="1"></div>
-            <div class="cell clickable" data-row="0" data-col="2"></div>
+            <div class="cell hit" data-coordinate="0,0"></div>
+            <div class="cell miss" data-coordinate="0,1"></div>
+            <div class="cell clickable" data-coordinate="0,2"></div>
           </div>
           <div class="row">
             <div class="cell header">2</div>
-            <div class="cell clickable" data-row="1" data-col="0"></div>
-            <div class="cell clickable" data-row="1" data-col="1"></div>
-            <div class="cell clickable" data-row="1" data-col="2"></div>
+            <div class="cell clickable" data-coordinate="1,0"></div>
+            <div class="cell clickable" data-coordinate="1,1"></div>
+            <div class="cell clickable" data-coordinate="1,2"></div>
           </div>
           <div class="row">
             <div class="cell header">3</div>
-            <div class="cell clickable" data-row="2" data-col="0"></div>
-            <div class="cell clickable" data-row="2" data-col="1"></div>
-            <div class="cell clickable" data-row="2" data-col="2"></div>
+            <div class="cell clickable" data-coordinate="2,0"></div>
+            <div class="cell clickable" data-coordinate="2,1"></div>
+            <div class="cell clickable" data-coordinate="2,2"></div>
           </div>
         </div>
 
         <h3>p1MoveList</h3>
         <div class="p1-move-list"></div>
 
-        <h3>p1Board</h3>
-        <div class="p1-board">
+        <h3>p1PlayerBoard</h3>
+        <div class="p1-player-board">
           <div class="row header">
             <div class="cell"></div>
             <div class="cell header">A</div>
@@ -64,21 +64,21 @@
           </div>
           <div class="row">
             <div class="cell header">1</div>
-            <div class="cell" data-row="0" data-col="0"></div>
-            <div class="cell" data-row="0" data-col="1"></div>
-            <div class="cell" data-row="0" data-col="2"></div>
+            <div class="cell" data-coordinate="0,0"></div>
+            <div class="cell" data-coordinate="0,1"></div>
+            <div class="cell" data-coordinate="0,2"></div>
           </div>
           <div class="row">
             <div class="cell header">2</div>
-            <div class="cell" data-row="1" data-col="0"></div>
-            <div class="cell ship" data-row="1" data-col="1"></div>
-            <div class="cell ship" data-row="1" data-col="2"></div>
+            <div class="cell" data-coordinate="1,0"></div>
+            <div class="cell ship" data-coordinate="1,1"></div>
+            <div class="cell ship" data-coordinate="1,2"></div>
           </div>
           <div class="row">
             <div class="cell header">3</div>
-            <div class="cell" data-row="2" data-col="0"></div>
-            <div class="cell" data-row="2" data-col="1"></div>
-            <div class="cell" data-row="2" data-col="2"></div>
+            <div class="cell" data-coordinate="2,0"></div>
+            <div class="cell" data-coordinate="2,1"></div>
+            <div class="cell" data-coordinate="2,2"></div>
           </div>
         </div>
       </div>
@@ -96,8 +96,8 @@
           </ul>
         </div>
 
+        <h3>p2OpponentBoard</h3>
         <div class="p2-opponent-board">
-          <h3>p2OpponentBoard</h3>
           <div class="row header">
             <div class="cell"></div>
             <div class="cell header">A</div>
@@ -106,31 +106,29 @@
           </div>
           <div class="row">
             <div class="cell header">1</div>
-            <div class="cell" data-row="0" data-col="0"></div>
-            <div class="cell" data-row="0" data-col="1"></div>
-            <div class="cell" data-row="0" data-col="2"></div>
+            <div class="cell" data-coordinate="0,0"></div>
+            <div class="cell" data-coordinate="0,1"></div>
+            <div class="cell" data-coordinate="0,2"></div>
           </div>
           <div class="row">
             <div class="cell header">2</div>
-            <div class="cell" data-row="1" data-col="0"></div>
-            <div class="cell" data-row="1" data-col="1"></div>
-            <div class="cell" data-row="1" data-col="2"></div>
+            <div class="cell" data-coordinate="1,0"></div>
+            <div class="cell" data-coordinate="1,1"></div>
+            <div class="cell" data-coordinate="1,2"></div>
           </div>
           <div class="row">
             <div class="cell header">3</div>
-            <div class="cell" data-row="2" data-col="0"></div>
-            <div class="cell" data-row="2" data-col="1"></div>
-            <div class="cell" data-row="2" data-col="2"></div>
+            <div class="cell" data-coordinate="2,0"></div>
+            <div class="cell" data-coordinate="2,1"></div>
+            <div class="cell" data-coordinate="2,2"></div>
           </div>
         </div>
 
-        <div class="p2-move-list">
-          <h3>p2MoveList</h3>
-        </div>
+        <h3>p2MoveList</h3>
+        <div class="p2-move-list"></div>
 
-        <div class="p2-board">
-          <h3>p2Board</h3>
-        </div>
+        <h3>p2PlayerBoard</h3>
+        <div class="p2-player-board"></div>
       </div>
     </div>
     <script src="./scripts/main.js" type="module"></script>

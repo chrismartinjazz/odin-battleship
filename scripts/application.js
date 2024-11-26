@@ -25,7 +25,10 @@ export class Application {
       this.playerTwo,
     );
 
+    // Just for testing - TODO remove
     this.testGameLoop();
+    this.display.updateOpponentBoard(this.playerOne, "p1-opponent-board");
+    this.display.updateOpponentBoard(this.playerTwo, "p2-opponent-board");
   }
 
   fireShot(firingPlayer, receivingPlayer, coordinate) {
@@ -33,7 +36,7 @@ export class Application {
     // The firing player updates their record of shots fired with the coordinates
     // and result (which can be "hit", "miss" or "error")
     const result = receivingPlayer.gameBoard.receiveAttack(coordinate);
-    if (result) firingPlayer.updateShotsFired({ coordinate, result });
+    if (result) firingPlayer.updateShotsFired(result);
     this.swapCurrentPlayer();
   }
 

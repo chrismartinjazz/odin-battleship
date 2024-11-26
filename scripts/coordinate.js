@@ -24,6 +24,10 @@ export class Coordinate {
   addVector(vector) {
     return new Coordinate(this.row + vector.row, this.col + vector.col);
   }
+
+  toString() {
+    return `${this.row},${this.col}`;
+  }
 }
 
 export function validateCoordinates(originalList, validateList, size) {

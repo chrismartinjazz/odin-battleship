@@ -32,6 +32,11 @@ describe("Coordinate class", () => {
     const expectedResult = new Coordinate(4, 7);
     expect(coordinate.addVector(vector).isEqual(expectedResult));
   });
+
+  it("returns e.g.'1,2' as string", () => {
+    const coordinate = new Coordinate(1, 2);
+    expect(coordinate.toString()).toEqual("1,2");
+  });
 });
 
 describe("validateCoordinates", () => {
