@@ -54,3 +54,8 @@ export function generateCoordinateLine(
   }
   return output;
 }
+
+export function coordinateFromString(string) {
+  const rowCol = string.split(",").map((item) => Number(item));
+  return new Coordinate(rowCol[0], rowCol[1]);
+}

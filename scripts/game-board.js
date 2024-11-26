@@ -5,36 +5,55 @@ export class GameBoard {
   constructor(size) {
     this.size = size;
     this.ships = [];
-    this.shipCoordinates = [];
-    this.hitsReceived = [];
-    this.missesReceived = [];
+
+    // this.hitsReceived = []; Replace with shotsReceived
+    // this.missesReceived = []; Replace with shotsReceived
+
     this.shotsFired = [];
+    this.shotsReceived = [];
+    // both are {coordinate, result}, result is either "hit" or "miss"
   }
 
   placeShip(startingCoordinate, directionVector, length) {
-    const newCoordinates = generateCoordinateLine(
+    const newShipCoordinates = generateCoordinateLine(
       startingCoordinate,
       directionVector,
       length,
     );
-    if (validateCoordinates(this.shipCoordinates, newCoordinates, this.size)) {
-      this.addCoordinates(newCoordinates);
+
+    const currentShipCoordinates = this.getCurrentShipCoordinates();
+
+    if (
+      validateCoordinates(currentShipCoordinates, newShipCoordinates, this.size)
+    ) {
       const ship = new Ship(length);
-      this.ships.push({ ship: ship, coordinates: newCoordinates });
+      this.ships.push({ ship: ship, coordinates: newShipCoordinates });
       return true;
     } else {
       return false;
     }
   }
 
-  addCoordinates(coordinates) {
+  getCurrentShipCoordinates() {
+    let result = [];
+    for (const ship of this.ships) {
+      result = result.concat(ship.coordinates);
+    }
+    return result;
+  }
+
+  updateBoardState(coordinates) {
     for (const coordinate of coordinates) {
-      this.shipCoordinates.push(coordinate);
+      this.shotsReceived.push(coordinate);
     }
   }
 
   updateShotsFired({ coordinate, result }) {
     this.shotsFired.push({ coordinate, result });
+  }
+
+  updateShotsReceived({ coordinate, result }) {
+    this.shotsReceived.push({ coordinate, result });
   }
 
   receiveAttack(coordinate) {
@@ -43,24 +62,24 @@ export class GameBoard {
     board). Return undefined if invalid. 'Hit' a ship if appropriate and return
     a record of results.
     */
-    if (
-      validateCoordinates(
-        this.hitsReceived.concat(this.missesReceived),
-        [coordinate],
-        this.size,
-      )
-    ) {
+    let coordinatesShot = this.coordinateList(this.shotsReceived);
+
+    if (validateCoordinates(coordinatesShot, [coordinate], this.size)) {
       const shipAndIndex = this.findShipAndIndex(coordinate);
       if (shipAndIndex) {
         shipAndIndex.ship.hit();
-        this.hitsReceived.push(coordinate);
+        this.shotsReceived.push({ coordinate, result: "hit" });
         const sunk = shipAndIndex.ship.isSunk() ? shipAndIndex.index : null;
         return { coordinate, result: "hit", sunk };
       }
-      this.missesReceived.push(coordinate);
+      this.shotsReceived.push({ coordinate, result: "miss" });
       return { coordinate, result: "miss", sunk: null };
     }
     return;
+  }
+
+  coordinateList(shotList) {
+    return shotList.map((shot) => shot.coordinate);
   }
 
   findShipAndIndex(coordinate) {

@@ -1,5 +1,5 @@
 import { Player } from "./player.js";
-import { Coordinate } from "./coordinate.js";
+import { Coordinate, coordinateFromString } from "./coordinate.js";
 import { Display } from "./display.js";
 
 export class Application {
@@ -37,7 +37,16 @@ export class Application {
   initializeEventListeners() {
     // Add event listener - TODO make this send an attack and toggle current player
     this.display.p1OpponentBoard.addEventListener("click", (event) => {
-      console.log(event.target.getAttribute("data-coordinate"));
+      const coordinateString = event.target.getAttribute("data-coordinate");
+      console.log(coordinateString);
+
+      this.fireShot(
+        this.playerOne,
+        this.playerTwo,
+        coordinateFromString(coordinateString),
+      );
+      this.display.updateOpponentBoard(this.playerOne, "p1-opponent-board");
+      this.display.updatePlayerBoard(this.playerTwo, "p2-player-board");
     });
     this.display.p2OpponentBoard.addEventListener("click", (event) => {
       console.log(event.target.getAttribute("data-coordinate"));
