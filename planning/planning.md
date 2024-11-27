@@ -180,8 +180,9 @@ Either way a calcShipCoordinates method sounds useful.
   - If all ships are sunk for inactive player, game is over
   - Otherwise, rotate turn.
 
-  ## Fixes needed
+## Modifications to add
 
-  - DONE Invalid move doesn't trigger move swap
-  - DONE Display updated on load
-  - DONE Clicking outside the squares doesn't crash
+- DONE Button to randomize ship placement and start a new game.
+- p?OpponentShips updates as ships are destroyed.
+- p?MoveList updates with each move, and is reset with new game.
+- two player mode - dialog to pass screen between each player.
