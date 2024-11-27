@@ -31,7 +31,7 @@ export class Application {
     );
 
     this.randomShipPlacement();
-    this.display.updateAllBoards();
+    this.display.updateDisplay();
     const randomizeShipsButton = document.querySelector(".randomize-ships");
     randomizeShipsButton.addEventListener(
       "click",
@@ -78,8 +78,10 @@ export class Application {
           this.setGameLoop();
         } else {
           // current player is computer - take computer turn and swap player.
-          this.takeTurn(this.currentPlayer.chooseCoordinate());
-          this.setGameLoop();
+          setTimeout(() => {
+            this.takeTurn(this.currentPlayer.chooseCoordinate());
+            this.setGameLoop();
+          }, 700);
         }
       },
       { once: true },
@@ -96,7 +98,7 @@ export class Application {
     const result = this.inactivePlayer.gameBoard.receiveAttack(coordinate);
     if (!result) return "invalid move";
     this.currentPlayer.gameBoard.updateShotsFired(result);
-    this.display.updateAllBoards();
+    this.display.updateDisplay();
     if (this.inactivePlayer.gameBoard.allShipsSunk()) {
       return "game over";
     }

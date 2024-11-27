@@ -6,11 +6,9 @@ export class Display {
     this.p2 = p2;
     this.p1OpponentShips = document.querySelector(".p1-opponent-ships");
     this.p1OpponentBoard = document.querySelector(".p1-opponent-board");
-    this.p1MoveList = document.querySelector(".p1-move-list");
     this.p1PlayerBoard = document.querySelector(".p1-player-board");
     this.p2OpponentShips = document.querySelector(".p2-opponent-ships");
     this.p2OpponentBoard = document.querySelector(".p2-opponent-board");
-    this.p2MoveList = document.querySelector(".p2-move-list");
     this.p2PlayerBoard = document.querySelector(".p2-player-board");
 
     this.initializeBoard(
@@ -25,6 +23,11 @@ export class Display {
     );
     this.initializeBoard(this.p1PlayerBoard, "p1-player-board", "cell");
     this.initializeBoard(this.p2PlayerBoard, "p2-player-board", "cell");
+    this.initializeShips();
+
+    this.playerOneDisplay = document.querySelector(".player-one-display");
+    this.playerTwoDisplay = document.querySelector(".player-two-display");
+    this.playerTwoDisplay.style.display = "none";
   }
 
   initializeBoard(board, boardSelector, cellClasses) {
@@ -59,11 +62,24 @@ export class Display {
     }
   }
 
-  updateAllBoards() {
+  initializeShips() {
+    this.p1OpponentShips.innerHTML = "";
+    this.p2OpponentShips.innerHTML = "";
+
+    for (const ship of this.shipDetails) {
+      const myLiP1 = this.makeElement("li", "", ship.name);
+      this.p1OpponentShips.append(myLiP1);
+      const myLiP2 = this.makeElement("li", "", ship.name);
+      this.p2OpponentShips.append(myLiP2);
+    }
+  }
+
+  updateDisplay() {
     this.updateOpponentBoard(this.p1, "p1-opponent-board");
     this.updateOpponentBoard(this.p2, "p2-opponent-board");
     this.updatePlayerBoard(this.p1, "p1-player-board");
     this.updatePlayerBoard(this.p2, "p2-player-board");
+    this.updateShips();
   }
 
   updateOpponentBoard(player, dataBoard) {
@@ -95,6 +111,20 @@ export class Display {
         `[data-board="${dataBoard}"][data-coordinate="${shot.coordinate.toString()}"]`,
       );
       cell.classList.add(shot.result);
+    }
+  }
+
+  updateShips() {
+    let index, shipRecord;
+    for ([index, shipRecord] of this.p2.gameBoard.ships.entries()) {
+      if (shipRecord.ship.isSunk()) {
+        this.p1OpponentShips.children[index].classList.add("sunk");
+      }
+    }
+    for ([index, shipRecord] of this.p1.gameBoard.ships.entries()) {
+      if (shipRecord.ship.isSunk()) {
+        this.p2OpponentShips.children[index].classList.add("sunk");
+      }
     }
   }
 

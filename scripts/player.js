@@ -6,6 +6,12 @@ export class Player {
     this.gameBoard = new GameBoard(size);
     this.string = string;
     this.type = type;
+    this.directionVectors = [
+      new Coordinate(0, 1),
+      new Coordinate(0, -1),
+      new Coordinate(1, 0),
+      new Coordinate(-1, 0),
+    ];
   }
 
   toString() {
@@ -28,26 +34,57 @@ export class Player {
         }
       }
     }
+
+    const adjacentCoordinates = [];
+    const hits = this.gameBoard.shotsFired.filter(
+      (shot) => shot.result === "hit",
+    );
+    for (const hit of hits) {
+      const coordinates = this.findAdjacentCoordinates(
+        hit.coordinate,
+        coordinatesRemaining,
+      );
+      console.log("coordinates:", coordinates);
+      for (const coordinate of coordinates) {
+        if (!coordinate.isInList(adjacentCoordinates)) {
+          adjacentCoordinates.push(coordinate);
+        }
+      }
+    }
+    console.log("adjacentCoordinates:", adjacentCoordinates);
+
     // Select a random element from remaining options.
+    if (adjacentCoordinates.length > 0) {
+      const randomIndex = Math.floor(
+        Math.random() * adjacentCoordinates.length,
+      );
+      return adjacentCoordinates[randomIndex];
+    }
     const randomIndex = Math.floor(Math.random() * coordinatesRemaining.length);
-    // return coordinatesRemaining;
     return coordinatesRemaining[randomIndex];
   }
 
-  placeShipsRandom(shipDetails) {
-    const directionVectors = [
-      new Coordinate(0, 1),
-      new Coordinate(0, -1),
-      new Coordinate(1, 0),
-      new Coordinate(-1, 0),
-    ];
+  findAdjacentCoordinates(coordinate, coordinatesRemaining) {
+    // Iterate over the four direction vectors, getting a new coordinate from each.
+    // Return an array of coordinates that are valid: i.e. in coordinatesRemaining, and not off the board.
+    const output = [];
+    for (const direction of this.directionVectors) {
+      const adjacentCoordinate = coordinate.addVector(direction);
+      if (adjacentCoordinate.isInList(coordinatesRemaining)) {
+        output.push(adjacentCoordinate);
+      }
+    }
+    console.log("output:", output);
+    return output;
+  }
 
+  placeShipsRandom(shipDetails) {
     for (let i = 0; i < shipDetails.length; i++) {
       let keepGoing = true;
       while (keepGoing) {
         const row = Math.floor(Math.random() * this.gameBoard.size);
         const col = Math.floor(Math.random() * this.gameBoard.size);
-        const direction = directionVectors[Math.floor(Math.random() * 4)];
+        const direction = this.directionVectors[Math.floor(Math.random() * 4)];
         const coordinate = new Coordinate(row, col);
         const result = this.gameBoard.placeShip(
           coordinate,

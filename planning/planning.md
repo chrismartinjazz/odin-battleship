@@ -183,6 +183,7 @@ Either way a calcShipCoordinates method sounds useful.
 ## Modifications to add
 
 - DONE Button to randomize ship placement and start a new game.
-- p?OpponentShips updates as ships are destroyed.
-- p?MoveList updates with each move, and is reset with new game.
+- DONE OpponentShips updates as ships are destroyed.
+- DONE one player mode - p2 board is hidden
+- DONE computer shoots cells adjacent to hits first.
 - two player mode - dialog to pass screen between each player.
