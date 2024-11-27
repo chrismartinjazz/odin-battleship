@@ -35,7 +35,7 @@ export function validateCoordinates(originalList, validateList, size) {
     if (coordinateToValidate.isInList(originalList)) {
       return false;
     }
-    if (!coordinateToValidate.isInRange(0, size, 0, size)) {
+    if (!coordinateToValidate.isInRange(0, size - 1, 0, size - 1)) {
       return false;
     }
   }

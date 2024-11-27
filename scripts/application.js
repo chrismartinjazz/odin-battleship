@@ -30,13 +30,9 @@ export class Application {
       this.playerTwo,
     );
 
-    // For testing - TODO remove
-    this.testPlaceShips(this.playerOne);
-    this.testPlaceShips(this.playerTwo);
-    //
-
+    this.playerOne.placeShipsRandom(this.shipDetails);
+    this.playerTwo.placeShipsRandom(this.shipDetails);
     this.display.updateAllBoards();
-
     this.setGameLoop();
   }
 
@@ -56,13 +52,17 @@ export class Application {
         // Attack the inactive player and swap to the next player.
         // If the move is invalid or the game is over, reset the game loop.
         const result = this.takeTurn(coordinateFromString(coordinateString));
-        if (!result) {
+        if (result === "invalid move") {
           this.setGameLoop();
+          return;
+        } else if (result === "game over") {
+          alert(`${this.currentPlayer.toString()} wins!`);
+          this.init(this.size, this.shipDetails);
           return;
         }
 
         // If the next player is human, reset the game loop with new board
-        if (this.currentPlayer.type == "human") {
+        if (this.currentPlayer.type === "human") {
           this.setGameLoop();
         } else {
           // current player is computer - take computer turn and swap player.
@@ -82,13 +82,11 @@ export class Application {
 
   takeTurn(coordinate) {
     const result = this.inactivePlayer.gameBoard.receiveAttack(coordinate);
-    if (!result) return false;
+    if (!result) return "invalid move";
     this.currentPlayer.gameBoard.updateShotsFired(result);
     this.display.updateAllBoards();
     if (this.inactivePlayer.gameBoard.allShipsSunk()) {
-      alert(`${this.currentPlayer.toString()} wins!`);
-      this.init(this.size, this.shipDetails);
-      return false;
+      return "game over";
     }
     this.swapCurrentPlayer();
     return result;
@@ -107,18 +105,5 @@ export class Application {
       const vector = new Coordinate(0, 1);
       player.gameBoard.placeShip(start, vector, this.shipDetails[row].length);
     }
-  }
-
-  resetApplication() {
-    this.playerOne = new Player(this.size, "p1", "human");
-    this.playerTwo = new Player(this.size, "p2", "computer");
-    this.currentPlayer = this.playerOne;
-    this.inactivePlayer = this.playerTwo;
-    this.display = new Display(
-      this.size,
-      this.shipDetails,
-      this.playerOne,
-      this.playerTwo,
-    );
   }
 }

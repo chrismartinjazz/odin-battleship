@@ -33,4 +33,29 @@ export class Player {
     // return coordinatesRemaining;
     return coordinatesRemaining[randomIndex];
   }
+
+  placeShipsRandom(shipDetails) {
+    const directionVectors = [
+      new Coordinate(0, 1),
+      new Coordinate(0, -1),
+      new Coordinate(1, 0),
+      new Coordinate(-1, 0),
+    ];
+
+    for (let i = 0; i < shipDetails.length; i++) {
+      let keepGoing = true;
+      while (keepGoing) {
+        const row = Math.floor(Math.random() * this.gameBoard.size);
+        const col = Math.floor(Math.random() * this.gameBoard.size);
+        const direction = directionVectors[Math.floor(Math.random() * 4)];
+        const coordinate = new Coordinate(row, col);
+        const result = this.gameBoard.placeShip(
+          coordinate,
+          direction,
+          shipDetails[i].length,
+        );
+        if (result) keepGoing = false;
+      }
+    }
+  }
 }
