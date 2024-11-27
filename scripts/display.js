@@ -59,6 +59,13 @@ export class Display {
     }
   }
 
+  updateAllBoards() {
+    this.updateOpponentBoard(this.p1, "p1-opponent-board");
+    this.updateOpponentBoard(this.p2, "p2-opponent-board");
+    this.updatePlayerBoard(this.p1, "p1-player-board");
+    this.updatePlayerBoard(this.p2, "p2-player-board");
+  }
+
   updateOpponentBoard(player, dataBoard) {
     // Add 'hit' or 'miss' class to cells that have been hit / missed
     for (const shot of player.gameBoard.shotsFired) {

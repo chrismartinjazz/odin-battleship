@@ -13,6 +13,10 @@ export class Application {
       { name: "Patrol Boat", length: 2 },
     ],
   ) {
+    this.init(size, shipDetails);
+  }
+
+  init(size, shipDetails) {
     this.size = size;
     this.shipDetails = shipDetails;
     this.playerOne = new Player(size, "p1", "human");
@@ -31,76 +35,63 @@ export class Application {
     this.testPlaceShips(this.playerTwo);
     //
 
-    this.setActivePlayerEventListener(this.display.p1OpponentBoard);
+    this.display.updateAllBoards();
+
+    this.setGameLoop();
   }
 
-  setActivePlayerEventListener(board) {
+  setGameLoop() {
+    // Add to the 'opponent board' of the current player
+    const board = this.currentPlayerOpponentBoard();
     board.addEventListener(
       "click",
       (event) => {
+        // Check the item targeted is a cell - reset game loop if not.
         const coordinateString = event.target.getAttribute("data-coordinate");
-        console.log(coordinateString);
+        if (!coordinateString) {
+          this.setGameLoop();
+          return;
+        }
 
-        const gameOver = this.takeTurn(coordinateString);
-        if (!gameOver) {
-          this.swapCurrentPlayer();
+        // Attack the inactive player and swap to the next player.
+        // If the move is invalid or the game is over, reset the game loop.
+        const result = this.takeTurn(coordinateFromString(coordinateString));
+        if (!result) {
+          this.setGameLoop();
+          return;
+        }
 
-          if (this.currentPlayer.type == "human") {
-            this.setActivePlayerEventListener(
-              this.currentPlayer == this.playerOne
-                ? this.display.p1OpponentBoard
-                : this.display.p2OpponentBoard,
-            );
-          } else {
-            // current player is computer
-            const gameOver = this.takeTurn(
-              this.currentPlayer.chooseCoordinate().toString(),
-            );
-            if (!gameOver) {
-              this.swapCurrentPlayer();
-              this.setActivePlayerEventListener(
-                this.currentPlayer == this.playerOne
-                  ? this.display.p1OpponentBoard
-                  : this.display.p2OpponentBoard,
-              );
-            }
-          }
+        // If the next player is human, reset the game loop with new board
+        if (this.currentPlayer.type == "human") {
+          this.setGameLoop();
+        } else {
+          // current player is computer - take computer turn and swap player.
+          this.takeTurn(this.currentPlayer.chooseCoordinate());
+          this.setGameLoop();
         }
       },
       { once: true },
     );
   }
 
-  takeTurn(coordinateString) {
-    this.fireShot(
-      this.currentPlayer,
-      this.inactivePlayer,
-      coordinateFromString(coordinateString),
-    );
-
-    this.display.updateOpponentBoard(
-      this.currentPlayer,
-      `${this.currentPlayer.toString()}-opponent-board`,
-    );
-    this.display.updatePlayerBoard(
-      this.inactivePlayer,
-      `${this.inactivePlayer.toString()}-player-board`,
-    );
-
-    if (this.inactivePlayer.gameBoard.allShipsSunk()) {
-      alert(`${this.currentPlayer.toString()} wins!`);
-      return true;
-    } else {
-      return false;
-    }
+  currentPlayerOpponentBoard() {
+    return this.currentPlayer == this.playerOne
+      ? this.display.p1OpponentBoard
+      : this.display.p2OpponentBoard;
   }
 
-  fireShot(firingPlayer, receivingPlayer, coordinate) {
-    // The receiving player receives the attack, and feeds back the result.
-    // The firing player updates their record of shots fired with the coordinates
-    // and result (which can be "hit", "miss" or "error")
-    const result = receivingPlayer.gameBoard.receiveAttack(coordinate);
-    if (result) firingPlayer.gameBoard.updateShotsFired(result);
+  takeTurn(coordinate) {
+    const result = this.inactivePlayer.gameBoard.receiveAttack(coordinate);
+    if (!result) return false;
+    this.currentPlayer.gameBoard.updateShotsFired(result);
+    this.display.updateAllBoards();
+    if (this.inactivePlayer.gameBoard.allShipsSunk()) {
+      alert(`${this.currentPlayer.toString()} wins!`);
+      this.init(this.size, this.shipDetails);
+      return false;
+    }
+    this.swapCurrentPlayer();
+    return result;
   }
 
   swapCurrentPlayer() {
@@ -110,71 +101,24 @@ export class Application {
       this.inactivePlayer == this.playerOne ? this.playerTwo : this.playerOne;
   }
 
-  testGameLoop() {
-    // const attacks = [
-    //   new Coordinate(0, 0),
-    //   new Coordinate(0, 0),
-    //   new Coordinate(0, 0),
-    //   new Coordinate(0, 1),
-    //   new Coordinate(0, 2),
-    //   new Coordinate(0, 3),
-    //   new Coordinate(0, 4),
-    //   new Coordinate(0, 5),
-    //   new Coordinate(0, 6),
-    //   new Coordinate(0, 7),
-    //   new Coordinate(0, 8),
-    // ];
-
-    // const attacks1 = [
-    //   new Coordinate(0, 0),
-    //   new Coordinate(0, 0),
-    //   new Coordinate(0, 0),
-    //   new Coordinate(0, 1),
-    //   new Coordinate(0, 2),
-    //   new Coordinate(0, 3),
-    //   new Coordinate(0, 4),
-    //   new Coordinate(0, 5),
-    //   new Coordinate(0, 6),
-    //   new Coordinate(0, 7),
-    //   new Coordinate(0, 8),
-    //   new Coordinate(0, 11),
-    //   new Coordinate(0, 12),
-    //   new Coordinate(1, 0),
-    //   new Coordinate(1, 1),
-    //   new Coordinate(1, 2),
-    //   new Coordinate(1, 3),
-    //   new Coordinate(2, 0),
-    //   new Coordinate(2, 1),
-    //   new Coordinate(2, 2),
-    //   new Coordinate(3, 0),
-    //   new Coordinate(3, 1),
-    //   new Coordinate(3, 2),
-    //   new Coordinate(4, 0),
-    //   new Coordinate(4, 1),
-    // ];
-
-    this.testPlaceShips(this.playerOne);
-    this.testPlaceShips(this.playerTwo);
-    // attacks.forEach((attack) => {
-    //   this.fireShot(this.playerOne, this.playerTwo, attack);
-    //   this.fireShot(this.playerTwo, this.playerOne, attack);
-    //   console.log(
-    //     this.playerOne.gameBoard.shipsSunk(),
-    //     this.playerTwo.gameBoard.shipsSunk(),
-    //   );
-    // });
-    // console.log(
-    //   this.playerOne.gameBoard.allShipsSunk(),
-    //   this.playerTwo.gameBoard.allShipsSunk(),
-    // );
-    // console.log(this);
-  }
-
   testPlaceShips(player) {
     for (let row = 0; row < this.shipDetails.length; row++) {
       const start = new Coordinate(row, 0);
       const vector = new Coordinate(0, 1);
       player.gameBoard.placeShip(start, vector, this.shipDetails[row].length);
     }
+  }
+
+  resetApplication() {
+    this.playerOne = new Player(this.size, "p1", "human");
+    this.playerTwo = new Player(this.size, "p2", "computer");
+    this.currentPlayer = this.playerOne;
+    this.inactivePlayer = this.playerTwo;
+    this.display = new Display(
+      this.size,
+      this.shipDetails,
+      this.playerOne,
+      this.playerTwo,
+    );
   }
 }

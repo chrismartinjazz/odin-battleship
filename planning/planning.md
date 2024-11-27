@@ -179,3 +179,9 @@ Either way a calcShipCoordinates method sounds useful.
   - Active player records result of attack
   - If all ships are sunk for inactive player, game is over
   - Otherwise, rotate turn.
+
+  ## Fixes needed
+
+  - DONE Invalid move doesn't trigger move swap
+  - DONE Display updated on load
+  - DONE Clicking outside the squares doesn't crash

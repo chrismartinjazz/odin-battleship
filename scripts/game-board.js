@@ -75,7 +75,7 @@ export class GameBoard {
       this.shotsReceived.push({ coordinate, result: "miss" });
       return { coordinate, result: "miss", sunk: null };
     }
-    return;
+    return false;
   }
 
   coordinateList(shotList) {
