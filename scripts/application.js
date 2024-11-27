@@ -30,10 +30,22 @@ export class Application {
       this.playerTwo,
     );
 
+    this.randomShipPlacement();
+    this.display.updateAllBoards();
+    const randomizeShipsButton = document.querySelector(".randomize-ships");
+    randomizeShipsButton.addEventListener(
+      "click",
+      () => {
+        this.init(this.size, this.shipDetails);
+      },
+      { once: true },
+    );
+    this.setGameLoop();
+  }
+
+  randomShipPlacement() {
     this.playerOne.placeShipsRandom(this.shipDetails);
     this.playerTwo.placeShipsRandom(this.shipDetails);
-    this.display.updateAllBoards();
-    this.setGameLoop();
   }
 
   setGameLoop() {
