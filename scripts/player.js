@@ -44,14 +44,12 @@ export class Player {
         hit.coordinate,
         coordinatesRemaining,
       );
-      console.log("coordinates:", coordinates);
       for (const coordinate of coordinates) {
         if (!coordinate.isInList(adjacentCoordinates)) {
           adjacentCoordinates.push(coordinate);
         }
       }
     }
-    console.log("adjacentCoordinates:", adjacentCoordinates);
 
     // Select a random element from remaining options.
     if (adjacentCoordinates.length > 0) {
@@ -74,7 +72,6 @@ export class Player {
         output.push(adjacentCoordinate);
       }
     }
-    console.log("output:", output);
     return output;
   }
 

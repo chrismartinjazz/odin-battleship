@@ -80,6 +80,19 @@ export class Display {
     this.updatePlayerBoard(this.p1, "p1-player-board");
     this.updatePlayerBoard(this.p2, "p2-player-board");
     this.updateShips();
+    // TODO - move to application.js If player 2 is human, then manage swapping of screen displays
+    // if (this.p2.type === "human") this.swapDisplay();
+  }
+
+  swapDisplay() {
+    // TODO - move this to application.js so Display doesn't have to know who current player is or their type.
+    // if (currentPlayer.toString === "p1") {
+    //   this.playerOneDisplay.style.display = "block";
+    //   this.playerTwoDisplay.style.display = "none";
+    // } else {
+    //   this.playerOneDisplay.style.display = "none";
+    //   this.playerTwoDisplay.style.display = "block";
+    // }
   }
 
   updateOpponentBoard(player, dataBoard) {

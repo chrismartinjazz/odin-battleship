@@ -20,7 +20,7 @@ export class Application {
     this.size = size;
     this.shipDetails = shipDetails;
     this.playerOne = new Player(size, "p1", "human");
-    this.playerTwo = new Player(size, "p2", "computer");
+    this.playerTwo = new Player(size, "p2", "human");
     this.currentPlayer = this.playerOne;
     this.inactivePlayer = this.playerTwo;
     this.display = new Display(
@@ -31,7 +31,7 @@ export class Application {
     );
 
     this.randomShipPlacement();
-    this.display.updateDisplay();
+    this.display.updateDisplay(this.currentPlayer);
     const randomizeShipsButton = document.querySelector(".randomize-ships");
     randomizeShipsButton.addEventListener(
       "click",
@@ -98,11 +98,11 @@ export class Application {
     const result = this.inactivePlayer.gameBoard.receiveAttack(coordinate);
     if (!result) return "invalid move";
     this.currentPlayer.gameBoard.updateShotsFired(result);
-    this.display.updateDisplay();
     if (this.inactivePlayer.gameBoard.allShipsSunk()) {
       return "game over";
     }
     this.swapCurrentPlayer();
+    this.display.updateDisplay(this.currentPlayer);
     return result;
   }
 
