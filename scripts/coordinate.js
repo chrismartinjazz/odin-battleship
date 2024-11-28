@@ -66,3 +66,10 @@ export function coordinateFromString(string) {
   const rowCol = string.split(",").map((item) => Number(item));
   return new Coordinate(rowCol[0], rowCol[1]);
 }
+
+export const directionVectors = [
+  new Coordinate(0, 1),
+  new Coordinate(1, 0),
+  new Coordinate(0, -1),
+  new Coordinate(-1, 0),
+];
