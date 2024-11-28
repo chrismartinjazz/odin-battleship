@@ -44,6 +44,7 @@ export class Player {
         hit.coordinate,
         coordinatesRemaining,
       );
+
       for (const coordinate of coordinates) {
         if (!coordinate.isInList(adjacentCoordinates)) {
           adjacentCoordinates.push(coordinate);

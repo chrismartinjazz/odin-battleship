@@ -17,13 +17,7 @@
         <h2>Player One</h2>
 
         <div>
-          <ul class="p1-opponent-ships">
-            <li>Carrier</li>
-            <li>Battleship</li>
-            <li>Destroyer</li>
-            <li>Submarine</li>
-            <li>Patrol Boat</li>
-          </ul>
+          <ul class="p1-opponent-ships"></ul>
         </div>
 
         <div class="p1-opponent-board board"></div>
@@ -35,13 +29,7 @@
         <h2>Player Two</h2>
 
         <div>
-          <ul class="p2-opponent-ships ships">
-            <li>Carrier</li>
-            <li>Battleship</li>
-            <li>Destroyer</li>
-            <li>Submarine</li>
-            <li>Patrol Boat</li>
-          </ul>
+          <ul class="p2-opponent-ships ships"></ul>
         </div>
 
         <div class="p2-opponent-board board"></div>
@@ -50,6 +38,15 @@
       </div>
     </div>
 
+    <dialog class="dialog-swap-players">
+      <h2 class="dialog-swap-players__title">Result of your shot:</h2>
+      <div class="dialog-swap-players__result"></div>
+      <div class="dialog-swap-players__text">
+        Pass the controls and avert your eyes! Next player click to continue
+        when ready...
+      </div>
+      <button class="dialog-swap-players__button">Continue</button>
+    </dialog>
     <script src="./scripts/main.js" type="module"></script>
   </body>
 </html>

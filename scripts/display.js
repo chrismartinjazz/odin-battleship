@@ -10,6 +10,10 @@ export class Display {
     this.p2OpponentShips = document.querySelector(".p2-opponent-ships");
     this.p2OpponentBoard = document.querySelector(".p2-opponent-board");
     this.p2PlayerBoard = document.querySelector(".p2-player-board");
+    this.dialogSwapPlayers = document.querySelector(".dialog-swap-players");
+    this.dialogSwapPlayersResult = document.querySelector(
+      ".dialog-swap-players__result",
+    );
 
     this.initializeBoard(
       this.p1OpponentBoard,
@@ -28,6 +32,11 @@ export class Display {
     this.playerOneDisplay = document.querySelector(".player-one-display");
     this.playerTwoDisplay = document.querySelector(".player-two-display");
     this.playerTwoDisplay.style.display = "none";
+
+    this.initializeDialog(
+      this.dialogSwapPlayers,
+      ".dialog-swap-players__button",
+    );
   }
 
   initializeBoard(board, boardSelector, cellClasses) {
@@ -38,7 +47,7 @@ export class Display {
     myRowHeader.appendChild(this.makeElement("div", "cell"));
     for (let col = 0; col < this.size; col++) {
       myRowHeader.appendChild(
-        this.makeElement("div", "cell header", String.fromCharCode(col + 65)),
+        this.makeElement("div", "cell header", (col + 1).toString()),
       );
     }
     board.appendChild(myRowHeader);
@@ -47,7 +56,7 @@ export class Display {
     for (let row = 0; row < this.size; row++) {
       const myRow = this.makeElement("div", "row");
       myRow.appendChild(
-        this.makeElement("div", "cell header", (row + 1).toString()),
+        this.makeElement("div", "cell header", String.fromCharCode(row + 65)),
       );
       for (let col = 0; col < this.size; col++) {
         const myCell = this.makeElement("div", cellClasses);
@@ -80,19 +89,27 @@ export class Display {
     this.updatePlayerBoard(this.p1, "p1-player-board");
     this.updatePlayerBoard(this.p2, "p2-player-board");
     this.updateShips();
-    // TODO - move to application.js If player 2 is human, then manage swapping of screen displays
-    // if (this.p2.type === "human") this.swapDisplay();
   }
 
-  swapDisplay() {
-    // TODO - move this to application.js so Display doesn't have to know who current player is or their type.
-    // if (currentPlayer.toString === "p1") {
-    //   this.playerOneDisplay.style.display = "block";
-    //   this.playerTwoDisplay.style.display = "none";
-    // } else {
-    //   this.playerOneDisplay.style.display = "none";
-    //   this.playerTwoDisplay.style.display = "block";
-    // }
+  swapDisplay(result) {
+    this.dialogSwapPlayersResult.classList.remove("hit");
+    this.dialogSwapPlayersResult.innerText = `${result.coordinate.toText()}: ${result.result}`;
+    if (result.sunk) {
+      this.dialogSwapPlayersResult.innerHTML += `<br>You sunk the ${this.shipDetails[result.sunk].name}!`;
+    }
+    if (result.result === "hit") {
+      this.dialogSwapPlayersResult.classList.add("hit");
+    }
+    setTimeout(() => {
+      this.dialogSwapPlayers.showModal();
+      if (this.playerOneDisplay.style.display === "none") {
+        this.playerTwoDisplay.style.display = "none";
+        this.playerOneDisplay.style.display = "block";
+      } else if (this.playerTwoDisplay.style.display === "none") {
+        this.playerOneDisplay.style.display = "none";
+        this.playerTwoDisplay.style.display = "block";
+      } else return false;
+    }, 700);
   }
 
   updateOpponentBoard(player, dataBoard) {
@@ -139,6 +156,13 @@ export class Display {
         this.p2OpponentShips.children[index].classList.add("sunk");
       }
     }
+  }
+
+  initializeDialog(dialog, selector) {
+    const closeButton = document.querySelector(selector);
+    closeButton.addEventListener("click", () => {
+      dialog.close();
+    });
   }
 
   makeElement(htmlTag = "div", cssClass, text) {

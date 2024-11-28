@@ -1,3 +1,4 @@
 import { Application } from "./application.js";
 
-new Application();
+// "human" or "computer"
+new Application("human");

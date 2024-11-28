@@ -48,14 +48,14 @@ describe("placeShip", () => {
       new Coordinate(3, 8),
       new Coordinate(4, 8),
       new Coordinate(5, 8),
-      new Coordinate(10, 9),
-      new Coordinate(10, 10),
+      new Coordinate(8, 8),
+      new Coordinate(8, 9),
     ];
     myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 5);
     myGameBoard.placeShip(new Coordinate(2, 3), new Coordinate(1, 0), 4);
     myGameBoard.placeShip(new Coordinate(8, 4), new Coordinate(0, 1), 3);
     myGameBoard.placeShip(new Coordinate(3, 8), new Coordinate(1, 0), 3);
-    myGameBoard.placeShip(new Coordinate(10, 9), new Coordinate(0, 1), 2);
+    myGameBoard.placeShip(new Coordinate(8, 8), new Coordinate(0, 1), 2);
     expect(myGameBoard.ships.length).toBe(5);
     expect(myGameBoard.getCurrentShipCoordinates()).toEqual(expectedResult);
   });
@@ -103,9 +103,9 @@ describe("receiveAttack", () => {
     expect(myGameBoard.receiveAttack(new Coordinate(0, 2)).result).toBe("miss");
   });
 
-  it("returns undefined if attacking a square that has already been 'hit' and doesn't change receivedShots", () => {
+  it("returns false if attacking a square that has already been 'hit' and doesn't change receivedShots", () => {
     let initialShotsReceived = myGameBoard.shotsReceived;
-    expect(myGameBoard.receiveAttack(new Coordinate(0, 0))).toBe(undefined);
+    expect(myGameBoard.receiveAttack(new Coordinate(0, 0))).toBe(false);
     expect(myGameBoard.shotsReceived).toEqual(initialShotsReceived);
   });
 
