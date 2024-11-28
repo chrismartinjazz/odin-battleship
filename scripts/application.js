@@ -4,6 +4,7 @@ import { Display } from "./display.js";
 
 export class Application {
   constructor(
+    p2type = "computer",
     size = 10,
     shipDetails = [
       { name: "Carrier", length: 5 },
@@ -13,14 +14,14 @@ export class Application {
       { name: "Patrol Boat", length: 2 },
     ],
   ) {
-    this.init(size, shipDetails);
+    this.init(p2type, size, shipDetails);
   }
 
-  init(size, shipDetails) {
+  init(p2type, size, shipDetails) {
     this.size = size;
     this.shipDetails = shipDetails;
     this.playerOne = new Player(size, "p1", "human");
-    this.playerTwo = new Player(size, "p2", "human");
+    this.playerTwo = new Player(size, "p2", p2type);
     this.currentPlayer = this.playerOne;
     this.inactivePlayer = this.playerTwo;
     this.display = new Display(
@@ -36,7 +37,7 @@ export class Application {
     randomizeShipsButton.addEventListener(
       "click",
       () => {
-        this.init(this.size, this.shipDetails);
+        this.init(this.playerTwo.type, this.size, this.shipDetails);
       },
       { once: true },
     );
@@ -69,12 +70,13 @@ export class Application {
           return;
         } else if (result === "game over") {
           alert(`${this.currentPlayer.toString()} wins!`);
-          this.init(this.size, this.shipDetails);
+          this.init(this.playerTwo.type, this.size, this.shipDetails);
           return;
         }
 
-        // If the next player is human, reset the game loop with new board
+        // If the next player is human, swap board and reset the game loop
         if (this.currentPlayer.type === "human") {
+          this.display.swapDisplay(result);
           this.setGameLoop();
         } else {
           // current player is computer - take computer turn and swap player.

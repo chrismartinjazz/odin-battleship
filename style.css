@@ -99,3 +99,81 @@ li {
   line-height: 1.5em;
   margin-bottom: 2em;
 }
+
+.btn.close-dialog {
+  font-weight: 800;
+  background-color: var(--color-dark);
+  color: var(--color-light);
+  padding: .8em 2em;
+}
+
+/* Modal Dialog */
+
+::backdrop {
+  opacity: 1;
+  background-color: var(--color-dark);
+}
+
+dialog {
+  width: 80%;
+  max-width: 800px;
+  border: none;
+  background-color: var(--color-light);
+  border-radius: 0.4em;
+  margin: 0;
+  transform: translateX(-50%);
+  left: 50%;
+  top: 20%;
+  transition: display 1s allow-discrete, overlay 1s allow-discrete;
+  animation: close 1s forwards;
+  &[open] {
+    animation: open 1s forwards;
+  }
+}
+
+@keyframes open {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes close {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.dialog-swap-players {
+  text-align: center;
+  color: var(--color-dark);
+}
+
+.dialog-swap-players__result {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 1em;
+  padding: 1em 0;
+  border: 5px solid var(--color-dark);
+  border-radius: 1em;
+}
+
+.dialog-swap-players__result.hit {
+  background-color: var(--color-hit);
+  color: var(--color-highlight);
+}
+
+.dialog-swap-players__text {
+  font-size: 1.5rem;
+  font-style: italic;
+  margin-bottom: 1em;
+}
+
+.dialog-swap-players__button {
+  font-size: 1.5rem;
+}

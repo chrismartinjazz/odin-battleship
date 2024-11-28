@@ -25,6 +25,13 @@ export class Coordinate {
     return new Coordinate(this.row + vector.row, this.col + vector.col);
   }
 
+  toText() {
+    let output = "";
+    output += String.fromCharCode(this.row.toString().charCodeAt(0) + 17);
+    output += (this.col + 1).toString();
+    return output;
+  }
+
   toString() {
     return `${this.row},${this.col}`;
   }

@@ -186,4 +186,19 @@ Either way a calcShipCoordinates method sounds useful.
 - DONE OpponentShips updates as ships are destroyed.
 - DONE one player mode - p2 board is hidden
 - DONE computer shoots cells adjacent to hits first.
-- two player mode - dialog to pass screen between each player.
+- DONE two player mode - dialog to pass screen between each player.
+- Improved AI:
+  - Phase 1
+    - Randomly chosen coordinate from all remaining
+  - Phase 2
+    - For any hit without any adjacent hits
+    - randomly choose adjacent coordinates from this set
+  - Phase 3
+    - For any hit with adjacent hits, so long as none of the cells in the group of hits is 'sunk'
+    - Determine direction of coordinate group
+    - Attack the next cell after / before the group in same direction
+  - Work backwards through these three stages
+    - Are there any phase 3 cells? Attack those.
+    - Are there any phase 2 cells? Attack those.
+    - Otherwise, go with phase 1.
+
