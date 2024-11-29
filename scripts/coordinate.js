@@ -25,6 +25,10 @@ export class Coordinate {
     return new Coordinate(this.row + vector.row, this.col + vector.col);
   }
 
+  reverse() {
+    return new Coordinate(this.row * -1, this.col * -1);
+  }
+
   toText() {
     let output = "";
     output += String.fromCharCode(this.row.toString().charCodeAt(0) + 17);

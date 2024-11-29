@@ -48,8 +48,8 @@ export class GameBoard {
     }
   }
 
-  updateShotsFired({ coordinate, result }) {
-    this.shotsFired.push({ coordinate, result });
+  updateShotsFired({ coordinate, result, sunk }) {
+    this.shotsFired.push({ coordinate, result, sunk });
   }
 
   updateShotsReceived({ coordinate, result }) {
