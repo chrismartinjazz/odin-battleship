@@ -239,6 +239,12 @@ describe("when there are two lines of hits, with one sunk, and a number of misse
       ),
     ).toEqual([new Coordinate(4, 1)]);
   });
+
+  it("chooses the priority one target", () => {
+    expect(myPlayer.battleshipAi.chooseCoordinate()).toEqual(
+      new Coordinate(1, 3),
+    );
+  });
 });
 
 function init(hits = [], misses = []) {
