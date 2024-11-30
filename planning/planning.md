@@ -188,22 +188,22 @@ Either way a calcShipCoordinates method sounds useful.
 - DONE computer shoots cells adjacent to hits first.
 - DONE two player mode - dialog to pass screen between each player.
 - DONE Improved AI:
-  - Priority 1
+  - DONE Priority 1
     - For any hit with adjacent hits, so long as none of the cells in the group of hits is 'sunk'
     - Randomly attack the next cell after / before any group
-  - Priority 2
+  - DONE Priority 2
     - For any hit without any adjacent hits ('isolated hits')
     - randomly choose an adjacent coordinate
-  - Priority 3
+  - DONE Priority 3
     - Randomly chosen coordinate from all remaining
     - Prefer targets with more 'space' around them (this simulates the final stages of 'looking for the patrol ship' - you want to go with squares that are not next to another square already shot at)
 - **Application sequence fix:**
   - DONE Computer win screen not broken
-  - Opening screen has options for:
+  - DONE Opening screen has options for:
     - 1-player or 2-player
     - Random ship placement
     - Manual ship placement
-  - Player 1 / Player 2 win screen shows as a dialog with option to start a new game (very similar or identical to the opening screen).
+  - **Player 1 / Player 2 win screen shows as a simple dialog with button to start a new game.**
 - Random ship placement adjusted to avoid placing ships next to other ships.
 - Styling:
   - ships, hits, misses look more interesting

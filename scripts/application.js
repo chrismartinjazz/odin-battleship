@@ -30,21 +30,33 @@ export class Application {
     } else {
       this.manualShipPlacement();
     }
-    console.log("running updateDisplay on:", this.currentPlayer);
     this.display.updateDisplay(this.currentPlayer);
 
-    const randomizeShipsButton = document.querySelector(".randomize-ships");
-    randomizeShipsButton.addEventListener("click", this.handleRandomizeShips, {
-      once: true,
-    });
+    this.randomizeShipsButton = document.querySelector(".randomize-ships");
+    this.randomizeShipsButton.addEventListener(
+      "click",
+      this.handleRandomizeShips,
+      {
+        once: true,
+      },
+    );
 
     this.setGameLoop();
   }
 
   reset() {
-    this.randomizeShipsButton.removeEventListener(this.handleRandomizeShips);
-    this.display.p1OpponentBoard.removeEventListener(this.handleGameLoop);
-    this.display.p2OpponentBoard.removeEventListener(this.handleGameLoop);
+    this.randomizeShipsButton.removeEventListener(
+      "click",
+      this.handleRandomizeShips,
+    );
+    this.display.p1OpponentBoard.removeEventListener(
+      "click",
+      this.handleGameLoop,
+    );
+    this.display.p2OpponentBoard.removeEventListener(
+      "click",
+      this.handleGameLoop,
+    );
     if (this.timeoutId) {
       clearTimeout(this.timerId);
       this.timerId = null;
@@ -93,9 +105,7 @@ export class Application {
       this.setGameLoop();
       return;
     } else if (result === "game over") {
-      alert(`${this.currentPlayer.toString()} wins!`);
-      this.reset();
-      this.init(this.settings);
+      this.gameOver(this.currentPlayer);
       return;
     }
 
@@ -108,7 +118,7 @@ export class Application {
       this.timeoutId = setTimeout(() => {
         const result = this.takeTurn(this.currentPlayer.chooseCoordinate());
         if (result === "game over") {
-          alert(`${this.currentPlayer.toString()} wins!`);
+          this.gameOver(this.currentPlayer);
           this.reset();
           this.init(this.settings);
         }
@@ -143,6 +153,14 @@ export class Application {
       this.currentPlayer.toString() === "p1" ? this.playerTwo : this.playerOne;
     this.inactivePlayer =
       this.inactivePlayer.toString() === "p1" ? this.playerTwo : this.playerOne;
+  }
+
+  gameOver(winner) {
+    this.display.showGameOverDialog(
+      winner.toString() === "p1" ? "Player One" : "Player Two",
+    );
+    this.reset();
+    this.init(this.settings);
   }
 
   testPlaceShips(player) {

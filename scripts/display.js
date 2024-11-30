@@ -14,6 +14,11 @@ export class Display {
     this.dialogSwapPlayersResult = document.querySelector(
       ".dialog-swap-players__result",
     );
+    this.dialogGameOver = document.querySelector(".dialog-game-over");
+    this.dialogGameOverResult = document.querySelector(
+      ".dialog-game-over__result",
+    );
+
     this.timeoutId = null;
 
     this.initializeBoard(
@@ -40,6 +45,8 @@ export class Display {
       this.dialogSwapPlayers,
       ".dialog-swap-players__button",
     );
+
+    this.initializeDialog(this.dialogGameOver, ".dialog-game-over__button");
   }
 
   initializeBoard(board, boardSelector, cellClasses) {
@@ -118,6 +125,11 @@ export class Display {
         return false;
       }
     }, 700);
+  }
+
+  showGameOverDialog(winner) {
+    this.dialogGameOverResult.innerText = `${winner} wins!`;
+    this.dialogGameOver.showModal();
   }
 
   updateOpponentBoard(player, dataBoard) {
