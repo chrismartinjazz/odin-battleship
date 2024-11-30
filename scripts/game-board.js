@@ -5,13 +5,8 @@ export class GameBoard {
   constructor(size) {
     this.size = size;
     this.ships = [];
-
-    // this.hitsReceived = []; Replace with shotsReceived
-    // this.missesReceived = []; Replace with shotsReceived
-
     this.shotsFired = [];
     this.shotsReceived = [];
-    // both are {coordinate, result}, result is either "hit" or "miss"
   }
 
   placeShip(startingCoordinate, directionVector, length) {

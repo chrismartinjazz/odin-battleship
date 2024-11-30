@@ -47,6 +47,68 @@
       </div>
       <button class="dialog-swap-players__button">Continue</button>
     </dialog>
+
+    <dialog class="dialog-get-player-choices">
+      <h2>Battleship</h2>
+      <form novalidate action="#" method="get" class="form-get-player-choices">
+        <fieldset>
+          <div class="form-item-radio">
+            <div>
+              <p>Play against:</p>
+              <label for="opponentTypeComputer">
+                <input
+                  type="radio"
+                  id="opponentTypeComputer"
+                  name="opponentType"
+                  value="computer"
+                  checked
+                />
+                Computer
+              </label>
+              <label for="opponentTypeHuman">
+                <input
+                  type="radio"
+                  id="opponentTypeHuman"
+                  name="opponentType"
+                  value="human"
+                />
+                Human (two players on same device)
+              </label>
+            </div>
+          </div>
+          <div class="form-item-radio">
+            <div>
+              <p>Ship placement:</p>
+              <label for="shipPlacementRandom">
+                <input
+                  type="radio"
+                  id="shipPlacementRandom"
+                  name="shipPlacement"
+                  value="random"
+                  checked
+                />
+                Random
+              </label>
+              <label for="shipPlacementManual">
+                <input
+                  type="radio"
+                  id="shipPlacementManual"
+                  name="shipPlacement"
+                  value="manual"
+                />
+                Manual
+              </label>
+            </div>
+          </div>
+        </fieldset>
+        <div class="form-buttons">
+          <button type="submit" class="dialog-get-player-choices__button">
+            Start Game
+          </button>
+        </div>
+      </form>
+    </dialog>
+
     <script src="./scripts/main.js" type="module"></script>
   </body>
 </html>

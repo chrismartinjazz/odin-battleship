@@ -14,6 +14,7 @@ export class Display {
     this.dialogSwapPlayersResult = document.querySelector(
       ".dialog-swap-players__result",
     );
+    this.timeoutId = null;
 
     this.initializeBoard(
       this.p1OpponentBoard,
@@ -31,6 +32,8 @@ export class Display {
 
     this.playerOneDisplay = document.querySelector(".player-one-display");
     this.playerTwoDisplay = document.querySelector(".player-two-display");
+
+    this.playerOneDisplay.style.display = "block";
     this.playerTwoDisplay.style.display = "none";
 
     this.initializeDialog(
@@ -100,15 +103,20 @@ export class Display {
     if (result.result === "hit") {
       this.dialogSwapPlayersResult.classList.add("hit");
     }
-    setTimeout(() => {
+    this.timeoutId = setTimeout(() => {
       this.dialogSwapPlayers.showModal();
       if (this.playerOneDisplay.style.display === "none") {
         this.playerTwoDisplay.style.display = "none";
         this.playerOneDisplay.style.display = "block";
+        this.timeOutId = null;
       } else if (this.playerTwoDisplay.style.display === "none") {
         this.playerOneDisplay.style.display = "none";
         this.playerTwoDisplay.style.display = "block";
-      } else return false;
+        this.timeOutId = null;
+      } else {
+        this.timeOutId = null;
+        return false;
+      }
     }, 700);
   }
 
