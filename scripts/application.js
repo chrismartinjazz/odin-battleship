@@ -81,7 +81,11 @@ export class Application {
         } else {
           // current player is computer - take computer turn and swap player.
           setTimeout(() => {
-            this.takeTurn(this.currentPlayer.chooseCoordinate());
+            const result = this.takeTurn(this.currentPlayer.chooseCoordinate());
+            if (result === "game over") {
+              alert(`${this.currentPlayer.toString()} wins!`);
+              this.init(this.playerTwo.type, this.size, this.shipDetails);
+            }
             this.setGameLoop();
           }, 700);
         }

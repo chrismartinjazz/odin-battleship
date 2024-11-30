@@ -187,18 +187,40 @@ Either way a calcShipCoordinates method sounds useful.
 - DONE one player mode - p2 board is hidden
 - DONE computer shoots cells adjacent to hits first.
 - DONE two player mode - dialog to pass screen between each player.
-- Improved AI:
-  - Phase 1
-    - Randomly chosen coordinate from all remaining
-  - Phase 2
-    - For any hit without any adjacent hits
-    - randomly choose adjacent coordinates from this set
-  - Phase 3
+- DONE Improved AI:
+  - Priority 1
     - For any hit with adjacent hits, so long as none of the cells in the group of hits is 'sunk'
-    - Determine direction of coordinate group
-    - Attack the next cell after / before the group in same direction
-  - Work backwards through these three stages
-    - Are there any phase 3 cells? Attack those.
-    - Are there any phase 2 cells? Attack those.
-    - Otherwise, go with phase 1.
+    - Randomly attack the next cell after / before any group
+  - Priority 2
+    - For any hit without any adjacent hits ('isolated hits')
+    - randomly choose an adjacent coordinate
+  - Priority 3
+    - Randomly chosen coordinate from all remaining
+    - Prefer targets with more 'space' around them (this simulates the final stages of 'looking for the patrol ship' - you want to go with squares that are not next to another square already shot at)
+- **Application sequence fix:**
+  - DONE Computer win screen not broken
+  - Opening screen has options for:
+    - 1-player or 2-player
+    - Random ship placement
+    - Manual ship placement
+  - Player 1 / Player 2 win screen shows as a dialog with option to start a new game (very similar or identical to the opening screen).
+- Random ship placement adjusted to avoid placing ships next to other ships.
+- Styling:
+  - ships, hits, misses look more interesting
+  - Background, grid, dialogs
 
+```txt
+  BATTLESHIP
+
+  New game:
+  o 1-player
+  o 2-player
+
+  Ship placement:
+  o Random
+  o Manual
+
+  +-----+
+  |START|
+  +-----+
+```
