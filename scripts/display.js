@@ -10,13 +10,32 @@ export class Display {
     this.p2OpponentShips = document.querySelector(".p2-opponent-ships");
     this.p2OpponentBoard = document.querySelector(".p2-opponent-board");
     this.p2PlayerBoard = document.querySelector(".p2-player-board");
+
     this.dialogSwapPlayers = document.querySelector(".dialog-swap-players");
     this.dialogSwapPlayersResult = document.querySelector(
       ".dialog-swap-players__result",
     );
+
     this.dialogGameOver = document.querySelector(".dialog-game-over");
     this.dialogGameOverResult = document.querySelector(
       ".dialog-game-over__result",
+    );
+
+    this.dialogShipPlacement = document.querySelector(".dialog-ship-placement");
+    this.dialogShipPlacementTitle = document.querySelector(
+      ".dialog-ship-placement__title",
+    );
+    this.dialogShipPlacementShips = document.querySelector(
+      ".dialog-ship-placement__ships",
+    );
+    this.dialogShipPlacementBoard = document.querySelector(
+      ".dialog-ship-placement__board",
+    );
+    this.dialogShipPlacementReset = document.querySelector(
+      ".dialog-ship-placement__reset",
+    );
+    this.dialogShipPlacementDone = document.querySelector(
+      ".dialog-ship-placement__done",
     );
 
     this.timeoutId = null;
@@ -47,6 +66,11 @@ export class Display {
     );
 
     this.initializeDialog(this.dialogGameOver, ".dialog-game-over__button");
+  }
+
+  showShipPlacementDialog(player) {
+    this.dialogShipPlacementTitle.innerText =
+      player.toString === "p1" ? "Player One" : "Player Two";
   }
 
   initializeBoard(board, boardSelector, cellClasses) {
