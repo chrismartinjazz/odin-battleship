@@ -4,16 +4,23 @@ export class Display {
     this.shipDetails = shipDetails;
     this.p1 = p1;
     this.p2 = p2;
+
+    this.playerOneDisplay = document.querySelector(".player-one-display");
+    this.playerTwoDisplay = document.querySelector(".player-two-display");
+
     this.p1OpponentShips = document.querySelector(".p1-opponent-ships");
     this.p1OpponentBoard = document.querySelector(".p1-opponent-board");
     this.p1PlayerBoard = document.querySelector(".p1-player-board");
+
     this.p2OpponentShips = document.querySelector(".p2-opponent-ships");
     this.p2OpponentBoard = document.querySelector(".p2-opponent-board");
     this.p2PlayerBoard = document.querySelector(".p2-player-board");
+
     this.dialogSwapPlayers = document.querySelector(".dialog-swap-players");
     this.dialogSwapPlayersResult = document.querySelector(
       ".dialog-swap-players__result",
     );
+
     this.dialogGameOver = document.querySelector(".dialog-game-over");
     this.dialogGameOverResult = document.querySelector(
       ".dialog-game-over__result",
@@ -21,6 +28,28 @@ export class Display {
 
     this.timeoutId = null;
 
+    this.initializeDisplay();
+    this.initializeDialogs();
+  }
+
+  initializeDisplay() {
+    this.initializeAllBoards();
+    this.initializeShips();
+
+    this.playerOneDisplay.style.display = "block";
+    this.playerTwoDisplay.style.display = "none";
+  }
+
+  initializeDialogs() {
+    this.initializeDialog(
+      this.dialogSwapPlayers,
+      ".dialog-swap-players__button",
+    );
+
+    this.initializeDialog(this.dialogGameOver, ".dialog-game-over__button");
+  }
+
+  initializeAllBoards() {
     this.initializeBoard(
       this.p1OpponentBoard,
       "p1-opponent-board",
@@ -33,20 +62,18 @@ export class Display {
     );
     this.initializeBoard(this.p1PlayerBoard, "p1-player-board", "cell");
     this.initializeBoard(this.p2PlayerBoard, "p2-player-board", "cell");
-    this.initializeShips();
+  }
 
-    this.playerOneDisplay = document.querySelector(".player-one-display");
-    this.playerTwoDisplay = document.querySelector(".player-two-display");
+  initializeShips() {
+    this.p1OpponentShips.innerHTML = "";
+    this.p2OpponentShips.innerHTML = "";
 
-    this.playerOneDisplay.style.display = "block";
-    this.playerTwoDisplay.style.display = "none";
-
-    this.initializeDialog(
-      this.dialogSwapPlayers,
-      ".dialog-swap-players__button",
-    );
-
-    this.initializeDialog(this.dialogGameOver, ".dialog-game-over__button");
+    for (const ship of this.shipDetails) {
+      const myLiP1 = this.makeElement("li", "", ship.name);
+      this.p1OpponentShips.append(myLiP1);
+      const myLiP2 = this.makeElement("li", "", ship.name);
+      this.p2OpponentShips.append(myLiP2);
+    }
   }
 
   initializeBoard(board, boardSelector, cellClasses) {
@@ -81,16 +108,11 @@ export class Display {
     }
   }
 
-  initializeShips() {
-    this.p1OpponentShips.innerHTML = "";
-    this.p2OpponentShips.innerHTML = "";
-
-    for (const ship of this.shipDetails) {
-      const myLiP1 = this.makeElement("li", "", ship.name);
-      this.p1OpponentShips.append(myLiP1);
-      const myLiP2 = this.makeElement("li", "", ship.name);
-      this.p2OpponentShips.append(myLiP2);
-    }
+  initializeDialog(dialog, selector) {
+    const closeButton = document.querySelector(selector);
+    closeButton.addEventListener("click", () => {
+      dialog.close();
+    });
   }
 
   updateDisplay() {
@@ -99,37 +121,6 @@ export class Display {
     this.updatePlayerBoard(this.p1, "p1-player-board");
     this.updatePlayerBoard(this.p2, "p2-player-board");
     this.updateShips();
-  }
-
-  swapDisplay(result) {
-    this.dialogSwapPlayersResult.classList.remove("hit");
-    this.dialogSwapPlayersResult.innerText = `${result.coordinate.toText()}: ${result.result}`;
-    if (result.sunk) {
-      this.dialogSwapPlayersResult.innerHTML += `<br>You sunk the ${this.shipDetails[result.sunk].name}!`;
-    }
-    if (result.result === "hit") {
-      this.dialogSwapPlayersResult.classList.add("hit");
-    }
-    this.timeoutId = setTimeout(() => {
-      this.dialogSwapPlayers.showModal();
-      if (this.playerOneDisplay.style.display === "none") {
-        this.playerTwoDisplay.style.display = "none";
-        this.playerOneDisplay.style.display = "block";
-        this.timeOutId = null;
-      } else if (this.playerTwoDisplay.style.display === "none") {
-        this.playerOneDisplay.style.display = "none";
-        this.playerTwoDisplay.style.display = "block";
-        this.timeOutId = null;
-      } else {
-        this.timeOutId = null;
-        return false;
-      }
-    }, 700);
-  }
-
-  showGameOverDialog(winner) {
-    this.dialogGameOverResult.innerText = `${winner} wins!`;
-    this.dialogGameOver.showModal();
   }
 
   updateOpponentBoard(player, dataBoard) {
@@ -178,11 +169,35 @@ export class Display {
     }
   }
 
-  initializeDialog(dialog, selector) {
-    const closeButton = document.querySelector(selector);
-    closeButton.addEventListener("click", () => {
-      dialog.close();
-    });
+  swapDisplay(result) {
+    this.dialogSwapPlayersResult.classList.remove("hit");
+    this.dialogSwapPlayersResult.innerText = `${result.coordinate.toText()}: ${result.result}`;
+    if (result.sunk) {
+      this.dialogSwapPlayersResult.innerHTML += `<br>You sunk the ${this.shipDetails[result.sunk].name}!`;
+    }
+    if (result.result === "hit") {
+      this.dialogSwapPlayersResult.classList.add("hit");
+    }
+    this.timeoutId = setTimeout(() => {
+      this.dialogSwapPlayers.showModal();
+      if (this.playerOneDisplay.style.display === "none") {
+        this.playerTwoDisplay.style.display = "none";
+        this.playerOneDisplay.style.display = "block";
+        this.timeOutId = null;
+      } else if (this.playerTwoDisplay.style.display === "none") {
+        this.playerOneDisplay.style.display = "none";
+        this.playerTwoDisplay.style.display = "block";
+        this.timeOutId = null;
+      } else {
+        this.timeOutId = null;
+        return false;
+      }
+    }, 700);
+  }
+
+  showGameOverDialog(winner) {
+    this.dialogGameOverResult.innerText = `${winner} wins!`;
+    this.dialogGameOver.showModal();
   }
 
   makeElement(htmlTag = "div", cssClass, text) {
