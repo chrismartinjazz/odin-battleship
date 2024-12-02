@@ -1,5 +1,5 @@
 import { Player } from "./player.js";
-import { Coordinate, coordinateFromString } from "./coordinate.js";
+import { coordinateFromString } from "./coordinate.js";
 import { Display } from "./display.js";
 
 export class Application {
@@ -25,13 +25,6 @@ export class Application {
       this.playerTwo,
     );
 
-    if (this.settings.shipPlacement === "random") {
-      this.randomShipPlacement();
-    } else {
-      this.manualShipPlacement();
-    }
-    this.display.updateDisplay(this.currentPlayer);
-
     this.randomizeShipsButton = document.querySelector(".randomize-ships");
     this.randomizeShipsButton.addEventListener(
       "click",
@@ -41,10 +34,18 @@ export class Application {
       },
     );
 
+    if (this.settings.shipPlacement === "random") {
+      this.randomShipPlacement();
+    } else {
+      this.manualShipPlacement();
+    }
+
+    this.display.updateDisplay(this.currentPlayer);
     this.setGameLoop();
   }
 
   reset() {
+    // Remove all EventListeners
     this.randomizeShipsButton.removeEventListener(
       "click",
       this.handleRandomizeShips,
@@ -57,6 +58,8 @@ export class Application {
       "click",
       this.handleGameLoop,
     );
+
+    // Clear event timers from Application and Display
     if (this.timeoutId) {
       clearTimeout(this.timerId);
       this.timerId = null;
@@ -84,6 +87,7 @@ export class Application {
   }
 
   handleRandomizeShips = () => {
+    // Restart the app with random ship placement for both players.
     this.settings.shipPlacement === "random";
     this.reset;
     this.init(this.settings);
@@ -98,8 +102,8 @@ export class Application {
     }
 
     // Attack the inactive player and swap to the next player.
-    // If the move is invalid or the game is over, reset the game loop.
-
+    // If the move is invalid reset the game loop. If the game is
+    // over run show the game over screen.
     const result = this.takeTurn(coordinateFromString(coordinateString));
     if (result === "invalid move") {
       this.setGameLoop();
@@ -114,7 +118,8 @@ export class Application {
       this.display.swapDisplay(result);
       this.setGameLoop();
     } else if (this.currentPlayer.type === "computer") {
-      // next player is computer - take computer turn and swap player.
+      // otherwise, next player is computer - take computer turn and swap player.
+      // Simulate 'thinking time' for the computer.
       this.timeoutId = setTimeout(() => {
         const result = this.takeTurn(this.currentPlayer.chooseCoordinate());
         if (result === "game over") {
@@ -161,17 +166,5 @@ export class Application {
     );
     this.reset();
     this.init(this.settings);
-  }
-
-  testPlaceShips(player) {
-    for (let row = 0; row < this.settings.shipDetails.length; row++) {
-      const start = new Coordinate(row, 0);
-      const vector = new Coordinate(0, 1);
-      player.gameBoard.placeShip(
-        start,
-        vector,
-        this.settings.shipDetails[row].length,
-      );
-    }
   }
 }
