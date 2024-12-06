@@ -21,6 +21,8 @@ export class Player {
   }
 
   placeShipsRandom(shipDetails) {
+    this.gameBoard.removeAllShips;
+
     // Iterate over the ships
     for (let i = 0; i < shipDetails.length; i++) {
       let keepGoing = true;
