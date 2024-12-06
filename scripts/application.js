@@ -2,6 +2,13 @@ import { DialogManager } from "./dialog-manager.js";
 import { Player } from "./player.js";
 import { Display } from "./display.js";
 import { coordinateFromString } from "./coordinate.js";
+import {
+  drag,
+  dragAllowDrop,
+  createDragDropHandler,
+  dragEnter,
+  dragLeave,
+} from "./drag-helpers.js";
 
 export class Application {
   constructor({ size, shipDetails }) {
@@ -9,7 +16,6 @@ export class Application {
     this.shipDetails = shipDetails;
 
     this.dialogManager = new DialogManager();
-
     this.getPlayerChoices();
   }
 
@@ -33,35 +39,100 @@ export class Application {
     this.playerTwo = new Player(this.size, "p2", opponentType);
     this.currentPlayer = this.playerOne;
     this.inactivePlayer = this.playerTwo;
-    this.placeShips(shipPlacement);
+    this.initializeDisplay(shipPlacement);
   }
 
-  placeShips(shipPlacement) {
-    if (shipPlacement === "random") {
-      this.playerOne.placeShipsRandom(this.shipDetails);
-      this.playerTwo.placeShipsRandom(this.shipDetails);
-      this.initializeDisplay();
-    } else {
-<<<<<<< HEAD
-      // TODO add manual ship placement.
-=======
-      // TODO add place ships manually
->>>>>>> 30d44dfdc5e28a6d66fe84e95d900f2547564c8a
-      this.initializeDisplay();
-    }
-  }
-
-  initializeDisplay() {
+  initializeDisplay(shipPlacement) {
     this.display = new Display(
       this.size,
       this.shipDetails,
       this.playerOne,
       this.playerTwo,
     );
-    this.display.updateDisplay(this.currentPlayer);
 
     this.initializeRandomizeShipsButton();
-    this.setGameLoop();
+    this.placeShips(shipPlacement);
+  }
+
+  placeShips(shipPlacement) {
+    console.log(shipPlacement);
+    if (shipPlacement === "random") {
+      this.playerOne.placeShipsRandom(this.shipDetails);
+      this.playerTwo.placeShipsRandom(this.shipDetails);
+      this.display.updateDisplay(this.currentPlayer);
+      this.setGameLoop();
+    } else if (shipPlacement === "manual") {
+      // Clear the playerBoard if it already exists
+      const existingBoard = document.querySelector(".ship-placement-p1__board");
+      console.log(existingBoard);
+      if (existingBoard) this.display.clearBoard(existingBoard, "cell");
+
+      // Procedurally construct the ships and board in the ship placement dialog
+      const shipPlacementP1Ships = document.querySelector(
+        ".ship-placement-p1__ships",
+      );
+      this.display.initializeShips(shipPlacementP1Ships, true);
+      const shipPlacementP1Board = document.querySelector(
+        ".ship-placement-p1__board",
+      );
+      this.display.initializeBoard(
+        shipPlacementP1Board,
+        "ship-placement-p1__board",
+        "cell clickable",
+      );
+
+      // Add dragging functionality to p1 board
+      this.playerOne.gameBoard.removeAllShips();
+      shipPlacementP1Board.addEventListener("dragover", dragAllowDrop);
+      shipPlacementP1Board.addEventListener("dragenter", dragEnter);
+      shipPlacementP1Board.addEventListener("dragleave", dragLeave);
+      const dragDropHandler = createDragDropHandler(
+        this.playerOne,
+        this.shipDetails,
+        this.display,
+        "ship-placement-p1__board",
+      );
+      shipPlacementP1Board.addEventListener("drop", dragDropHandler);
+
+      const shipListItems = document.querySelectorAll("li[draggable=true]");
+      for (const ship of shipListItems) {
+        ship.addEventListener("dragstart", drag);
+      }
+
+      this.dialogManager.addClickListener("ship-placement-p1", () => {
+        if (this.playerOne.gameBoard.ships.length === this.shipDetails.length) {
+          this.dialogManager.closeDialog("ship-placement-p1");
+          if (this.playerTwo.type === "computer") {
+            this.playerTwo.placeShipsRandom(this.shipDetails);
+            this.display.updateDisplay(this.currentPlayer);
+            this.setGameLoop();
+          }
+          console.log(this.playerOne.gameBoard.ships);
+        }
+      });
+
+      this.dialogManager.showDialog("ship-placement-p1");
+
+      // TODO add place ships manually
+      /*
+      
+      Add event listener to the submit button:
+        Close the dialog
+        If the next player is computer
+          Begin the game (continue)
+        If the next player is human
+          Create a new dialog, for Player 2
+          Show dialog
+          Add event listener to the board:
+            Place a ship with playerOne, checking for validity
+          Add event listener to the submit button:
+            Close the dialog
+            Begin the game
+      */
+
+      this.display.updateDisplay(this.currentPlayer);
+      this.setGameLoop();
+    } else console.log("Unexpected value for shipPlacement");
   }
 
   initializeRandomizeShipsButton() {
@@ -69,8 +140,7 @@ export class Application {
     this.randomizeShipsButton.addEventListener(
       "click",
       () => {
-        console.log("clicked");
-        this.placeShips("random");
+        this.createPlayers(this.playerTwo.type, "random");
       },
       { once: true },
     );
@@ -180,6 +250,7 @@ export class Application {
     const winnerText = winner.toString() === "p1" ? "Player One" : "Player Two";
     this.dialogManager.gameOverOutput.innerText = `${winnerText} wins!`;
     this.dialogManager.gameOverButton.addEventListener("click", () => {
+      this.dialogManager.initializeDialogs();
       this.getPlayerChoices();
     });
     this.dialogManager.showDialog("game-over");

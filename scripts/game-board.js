@@ -13,7 +13,7 @@ export class GameBoard {
     this.ships = [];
   }
 
-  placeShip(startingCoordinate, directionVector, length) {
+  placeShip(index, startingCoordinate, directionVector, length) {
     const newShipCoordinates = generateCoordinateLine(
       startingCoordinate,
       directionVector,
@@ -23,14 +23,27 @@ export class GameBoard {
     const currentShipCoordinates = this.getCurrentShipCoordinates();
 
     if (
-      validateCoordinates(currentShipCoordinates, newShipCoordinates, this.size)
+      validateCoordinates(
+        currentShipCoordinates,
+        newShipCoordinates,
+        this.size,
+      ) &&
+      !this.shipIsPlaced(index)
     ) {
       const ship = new Ship(length);
-      this.ships.push({ ship: ship, coordinates: newShipCoordinates });
+      this.ships.push({
+        index: index,
+        ship: ship,
+        coordinates: newShipCoordinates,
+      });
       return true;
     } else {
       return false;
     }
+  }
+
+  shipIsPlaced(index) {
+    return this.ships.some((shipRecord) => shipRecord.index === index);
   }
 
   getCurrentShipCoordinates() {

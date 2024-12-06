@@ -21,13 +21,14 @@ export class Player {
   }
 
   placeShipsRandom(shipDetails) {
-    this.gameBoard.removeAllShips;
+    this.gameBoard.removeAllShips();
 
     // Iterate over the ships
     for (let i = 0; i < shipDetails.length; i++) {
       let keepGoing = true;
+      let loopCount = 0;
       // Keep going until a valid ship placement is found.
-      while (keepGoing) {
+      while (keepGoing && loopCount < 1000) {
         // Randomly place the ship on the board.
         const row = Math.floor(Math.random() * this.gameBoard.size);
         const col = Math.floor(Math.random() * this.gameBoard.size);
@@ -36,13 +37,17 @@ export class Player {
         // Attempt to place the ship on the board. If it is successful, the ship
         // is now on the board. If not, returns false.
         const result = this.gameBoard.placeShip(
+          shipDetails[i].index,
           coordinate,
           direction,
           shipDetails[i].length,
         );
         // End loop if the ship was placed successfully.
         if (result) keepGoing = false;
+
+        loopCount += 1;
       }
+      console.log(loopCount);
     }
   }
 }

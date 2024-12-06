@@ -11,7 +11,7 @@ export class DialogManager {
   }
 
   createDialog({ selector, header, innerHTML, buttons = [] }) {
-    if (this.dialogs[selector]) return this.dialogs[selector];
+    if (this.dialogs[selector]) return;
 
     if (!innerHTML && !dialogTemplates[selector])
       throw new Error(`Dialog template for ${selector} not found`);
@@ -54,6 +54,14 @@ export class DialogManager {
     if (dialog) dialog.close();
   }
 
+  removeDialog(selector) {
+    const dialogs = document.querySelectorAll(`.dialog.${selector}`);
+    for (const dialog of dialogs) {
+      dialog.remove();
+      // if (typeof dialog.remove === "function") dialog.remove();
+    }
+  }
+
   addSubmitListener(selector, action) {
     const form = this.dialogs[selector].querySelector("form");
     if (form) {
@@ -61,7 +69,20 @@ export class DialogManager {
     }
   }
 
+  addClickListener(selector, action) {
+    const button = this.dialogs[selector].querySelector("button");
+    if (button) {
+      button.addEventListener("click", action);
+    }
+  }
+
   initializeDialogs() {
+    // Remove all stored dialogs from the DOM if they exist.
+    for (const entry of Object.entries(this.dialogs)) {
+      this.removeDialog(entry[0]);
+    }
+    this.dialogs = {};
+
     this.createDialog({
       selector: "player-choices",
       header: "Battleship",
@@ -92,6 +113,18 @@ export class DialogManager {
           },
         },
       ],
+    });
+
+    this.createDialog({
+      selector: "ship-placement-p1",
+      header: "Player One",
+      buttons: [{ text: "Continue" }],
+    });
+
+    this.createDialog({
+      selector: "ship-placement-p2",
+      header: "Player Two",
+      buttons: [{ text: "Continue" }],
     });
   }
 }

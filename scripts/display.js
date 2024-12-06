@@ -30,10 +30,14 @@ export class Display {
     this.playerTwoDisplay.style.display = "none";
   }
 
-  initializeShips(ships) {
+  initializeShips(ships, draggable = false) {
     ships.innerHTML = "";
     for (const ship of this.shipDetails) {
       const myLi = makeElement({ label: "li", html: ship.name });
+      if (draggable) {
+        myLi.setAttribute("draggable", "true");
+        myLi.setAttribute("data-index", ship.index);
+      }
       ships.append(myLi);
     }
   }
@@ -94,11 +98,23 @@ export class Display {
   }
 
   updateDisplay() {
+    this.clearBoard(this.p1OpponentBoard, "cell clickable");
+    this.clearBoard(this.p2OpponentBoard, "cell clickable");
+    this.clearBoard(this.p1PlayerBoard, "cell");
+    this.clearBoard(this.p2PlayerBoard, "cell");
+
     this.updateOpponentBoard(this.p1, "p1-opponent-board");
     this.updateOpponentBoard(this.p2, "p2-opponent-board");
     this.updatePlayerBoard(this.p1, "p1-player-board");
     this.updatePlayerBoard(this.p2, "p2-player-board");
     this.updateShips();
+  }
+
+  clearBoard(board, cellClasses) {
+    const cells = board.querySelectorAll(".cell");
+    for (const cell of cells) {
+      cell.className = cellClasses;
+    }
   }
 
   updateOpponentBoard(player, dataBoard) {
