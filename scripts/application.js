@@ -42,7 +42,11 @@ export class Application {
       this.playerTwo.placeShipsRandom(this.shipDetails);
       this.initializeDisplay();
     } else {
+<<<<<<< HEAD
       // TODO add manual ship placement.
+=======
+      // TODO add place ships manually
+>>>>>>> 30d44dfdc5e28a6d66fe84e95d900f2547564c8a
       this.initializeDisplay();
     }
   }
