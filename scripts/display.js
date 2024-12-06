@@ -1,3 +1,5 @@
+import { makeElement } from "./helper-functions.js";
+
 export class Display {
   constructor(size, shipDetails, p1, p2) {
     this.size = size;
@@ -5,6 +7,10 @@ export class Display {
     this.p1 = p1;
     this.p2 = p2;
 
+    this.initializeDisplay();
+  }
+
+  initializeDisplay() {
     this.playerOneDisplay = document.querySelector(".player-one-display");
     this.playerTwoDisplay = document.querySelector(".player-two-display");
 
@@ -16,37 +22,20 @@ export class Display {
     this.p2OpponentBoard = document.querySelector(".p2-opponent-board");
     this.p2PlayerBoard = document.querySelector(".p2-player-board");
 
-    this.dialogSwapPlayers = document.querySelector(".dialog-swap-players");
-    this.dialogSwapPlayersResult = document.querySelector(
-      ".dialog-swap-players__result",
-    );
-
-    this.dialogGameOver = document.querySelector(".dialog-game-over");
-    this.dialogGameOverResult = document.querySelector(
-      ".dialog-game-over__result",
-    );
-
-    this.timeoutId = null;
-
-    this.initializeDisplay();
-    this.initializeDialogs();
-  }
-
-  initializeDisplay() {
+    this.initializeShips(this.p1OpponentShips);
+    this.initializeShips(this.p2OpponentShips);
     this.initializeAllBoards();
-    this.initializeShips();
 
     this.playerOneDisplay.style.display = "block";
     this.playerTwoDisplay.style.display = "none";
   }
 
-  initializeDialogs() {
-    this.initializeDialog(
-      this.dialogSwapPlayers,
-      ".dialog-swap-players__button",
-    );
-
-    this.initializeDialog(this.dialogGameOver, ".dialog-game-over__button");
+  initializeShips(ships) {
+    ships.innerHTML = "";
+    for (const ship of this.shipDetails) {
+      const myLi = makeElement({ label: "li", html: ship.name });
+      ships.append(myLi);
+    }
   }
 
   initializeAllBoards() {
@@ -64,39 +53,35 @@ export class Display {
     this.initializeBoard(this.p2PlayerBoard, "p2-player-board", "cell");
   }
 
-  initializeShips() {
-    this.p1OpponentShips.innerHTML = "";
-    this.p2OpponentShips.innerHTML = "";
-
-    for (const ship of this.shipDetails) {
-      const myLiP1 = this.makeElement("li", "", ship.name);
-      this.p1OpponentShips.append(myLiP1);
-      const myLiP2 = this.makeElement("li", "", ship.name);
-      this.p2OpponentShips.append(myLiP2);
-    }
-  }
-
   initializeBoard(board, boardSelector, cellClasses) {
     board.innerHTML = "";
 
     // Add header row
-    const myRowHeader = this.makeElement("div", "row header");
-    myRowHeader.appendChild(this.makeElement("div", "cell"));
+    const myRowHeader = makeElement({ label: "div", classes: "row header" });
+    myRowHeader.appendChild(makeElement({ label: "div", classes: "cell" }));
     for (let col = 0; col < this.size; col++) {
       myRowHeader.appendChild(
-        this.makeElement("div", "cell header", (col + 1).toString()),
+        makeElement({
+          label: "div",
+          classes: "cell header",
+          html: (col + 1).toString(),
+        }),
       );
     }
     board.appendChild(myRowHeader);
 
     // Add body rows
     for (let row = 0; row < this.size; row++) {
-      const myRow = this.makeElement("div", "row");
+      const myRow = makeElement({ label: "div", classes: "row" });
       myRow.appendChild(
-        this.makeElement("div", "cell header", String.fromCharCode(row + 65)),
+        makeElement({
+          label: "div",
+          classes: "cell header",
+          html: String.fromCharCode(row + 65),
+        }),
       );
       for (let col = 0; col < this.size; col++) {
-        const myCell = this.makeElement("div", cellClasses);
+        const myCell = makeElement({ label: "div", classes: cellClasses });
         myCell.setAttribute(
           "data-coordinate",
           `${row.toString()},${col.toString()}`,
@@ -106,13 +91,6 @@ export class Display {
       }
       board.appendChild(myRow);
     }
-  }
-
-  initializeDialog(dialog, selector) {
-    const closeButton = document.querySelector(selector);
-    closeButton.addEventListener("click", () => {
-      dialog.close();
-    });
   }
 
   updateDisplay() {
@@ -169,41 +147,15 @@ export class Display {
     }
   }
 
-  swapDisplay(result) {
-    this.dialogSwapPlayersResult.classList.remove("hit");
-    this.dialogSwapPlayersResult.innerText = `${result.coordinate.toText()}: ${result.result}`;
-    if (result.sunk) {
-      this.dialogSwapPlayersResult.innerHTML += `<br>You sunk the ${this.shipDetails[result.sunk].name}!`;
+  swapDisplay() {
+    if (this.playerOneDisplay.style.display === "none") {
+      this.playerTwoDisplay.style.display = "none";
+      this.playerOneDisplay.style.display = "block";
+    } else if (this.playerTwoDisplay.style.display === "none") {
+      this.playerOneDisplay.style.display = "none";
+      this.playerTwoDisplay.style.display = "block";
+    } else {
+      return false;
     }
-    if (result.result === "hit") {
-      this.dialogSwapPlayersResult.classList.add("hit");
-    }
-    this.timeoutId = setTimeout(() => {
-      this.dialogSwapPlayers.showModal();
-      if (this.playerOneDisplay.style.display === "none") {
-        this.playerTwoDisplay.style.display = "none";
-        this.playerOneDisplay.style.display = "block";
-        this.timeOutId = null;
-      } else if (this.playerTwoDisplay.style.display === "none") {
-        this.playerOneDisplay.style.display = "none";
-        this.playerTwoDisplay.style.display = "block";
-        this.timeOutId = null;
-      } else {
-        this.timeOutId = null;
-        return false;
-      }
-    }, 700);
-  }
-
-  showGameOverDialog(winner) {
-    this.dialogGameOverResult.innerText = `${winner} wins!`;
-    this.dialogGameOver.showModal();
-  }
-
-  makeElement(htmlTag = "div", cssClass, text) {
-    const myElement = document.createElement(htmlTag);
-    if (cssClass) myElement.className = cssClass;
-    if (text) myElement.innerText = text;
-    return myElement;
   }
 }

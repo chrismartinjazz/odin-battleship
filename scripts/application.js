@@ -1,110 +1,96 @@
+import { DialogManager } from "./dialog-manager.js";
 import { Player } from "./player.js";
-import { coordinateFromString } from "./coordinate.js";
 import { Display } from "./display.js";
+import { coordinateFromString } from "./coordinate.js";
 
 export class Application {
-  constructor(settings) {
-    this.init(settings);
+  constructor({ size, shipDetails }) {
+    this.size = size;
+    this.shipDetails = shipDetails;
+
+    this.dialogManager = new DialogManager();
+
+    this.getPlayerChoices();
   }
 
-  init(settings) {
-    this.settings = settings;
-    this.timeoutId = null;
-    this.playerOne = new Player(this.settings.size, "p1", "human");
-    this.playerTwo = new Player(
-      this.settings.size,
-      "p2",
-      this.settings.opponentType,
-    );
+  getPlayerChoices() {
+    this.dialogManager.addSubmitListener("player-choices", (event) => {
+      event.preventDefault();
+      const opponentType = document.querySelector(
+        'input[name="opponentType"]:checked',
+      ).value;
+      const shipPlacement = document.querySelector(
+        'input[name="shipPlacement"]:checked',
+      ).value;
+      this.dialogManager.closeDialog("player-choices");
+      this.createPlayers(opponentType, shipPlacement);
+    });
+    this.dialogManager.showDialog("player-choices");
+  }
+
+  createPlayers(opponentType, shipPlacement) {
+    this.playerOne = new Player(this.size, "p1", "human");
+    this.playerTwo = new Player(this.size, "p2", opponentType);
     this.currentPlayer = this.playerOne;
     this.inactivePlayer = this.playerTwo;
+    this.placeShips(shipPlacement);
+  }
+
+  placeShips(shipPlacement) {
+    if (shipPlacement === "random") {
+      this.playerOne.placeShipsRandom(this.shipDetails);
+      this.playerTwo.placeShipsRandom(this.shipDetails);
+      this.initializeDisplay();
+    } else {
+      // TODO add manual ship placement.
+      this.initializeDisplay();
+    }
+  }
+
+  initializeDisplay() {
     this.display = new Display(
-      this.settings.size,
-      this.settings.shipDetails,
+      this.size,
+      this.shipDetails,
       this.playerOne,
       this.playerTwo,
     );
-
-    this.randomizeShipsButton = document.querySelector(".randomize-ships");
-    this.randomizeShipsButton.addEventListener(
-      "click",
-      this.handleRandomizeShips,
-      {
-        once: true,
-      },
-    );
-
-    if (this.settings.shipPlacement === "random") {
-      this.randomShipPlacement();
-    } else {
-      this.manualShipPlacement();
-    }
-
     this.display.updateDisplay(this.currentPlayer);
+
+    this.initializeRandomizeShipsButton();
     this.setGameLoop();
   }
 
-  reset() {
-    // Remove all EventListeners
-    this.randomizeShipsButton.removeEventListener(
+  initializeRandomizeShipsButton() {
+    this.randomizeShipsButton = document.querySelector(".randomize-ships");
+    this.randomizeShipsButton.addEventListener(
       "click",
-      this.handleRandomizeShips,
+      () => {
+        console.log("clicked");
+        this.placeShips("random");
+      },
+      { once: true },
     );
-    this.display.p1OpponentBoard.removeEventListener(
-      "click",
-      this.handleGameLoop,
-    );
-    this.display.p2OpponentBoard.removeEventListener(
-      "click",
-      this.handleGameLoop,
-    );
-
-    // Clear event timers from Application and Display
-    if (this.timeoutId) {
-      clearTimeout(this.timerId);
-      this.timerId = null;
-    }
-    if (this.display.timeoutId) {
-      clearTimeout(this.display.timerId);
-      this.display.timerId = null;
-    }
-  }
-
-  randomShipPlacement() {
-    this.playerOne.placeShipsRandom(this.settings.shipDetails);
-    this.playerTwo.placeShipsRandom(this.settings.shipDetails);
-  }
-
-  manualShipPlacement() {
-    // For now, this will just be the same as random. TODO - add manual placement.
-    this.randomShipPlacement();
   }
 
   setGameLoop() {
-    // Add to the 'opponent board' of the current player
     const board = this.currentPlayerOpponentBoard();
     board.addEventListener("click", this.handleGameLoop, { once: true });
   }
 
-  handleRandomizeShips = () => {
-    // Restart the app with random ship placement for both players.
-    this.settings.shipPlacement === "random";
-    this.reset;
-    this.init(this.settings);
-  };
-
   handleGameLoop = (event) => {
     // Check the item targeted is a cell - reset game loop if not.
+    // Store the clicked on coordinate in coordinateString.
     const coordinateString = event.target.getAttribute("data-coordinate");
     if (!coordinateString) {
       this.setGameLoop();
       return;
     }
 
-    // Attack the inactive player and swap to the next player.
-    // If the move is invalid reset the game loop. If the game is
-    // over run show the game over screen.
+    // Attack the inactive player.
     const result = this.takeTurn(coordinateFromString(coordinateString));
+
+    // If the move is invalid reset the game loop. If the game is
+    // over show the game over screen.
     if (result === "invalid move") {
       this.setGameLoop();
       return;
@@ -113,25 +99,33 @@ export class Application {
       return;
     }
 
+    this.swapCurrentPlayer();
+    this.display.updateDisplay(this.currentPlayer);
+
     // If the next player is human, swap board and reset the game loop
     if (this.currentPlayer.type === "human") {
-      this.display.swapDisplay(result);
+      this.nextPlayer(result);
       this.setGameLoop();
     } else if (this.currentPlayer.type === "computer") {
       // otherwise, next player is computer - take computer turn and swap player.
       // Simulate 'thinking time' for the computer.
-      this.timeoutId = setTimeout(() => {
+      setTimeout(() => {
         const result = this.takeTurn(this.currentPlayer.chooseCoordinate());
         if (result === "game over") {
           this.gameOver(this.currentPlayer);
-          this.reset();
-          this.init(this.settings);
+        } else if (result === "invalid move") {
+          throw new Error("Invalid move reported by Application.takeTurn()");
+        } else {
+          this.swapCurrentPlayer();
+          this.display.updateDisplay(this.currentPlayer);
+          this.setGameLoop();
         }
-        this.setGameLoop();
-        this.timerId = null;
       }, 700);
     } else {
-      throw new Error("Unexpected value for this.currentPlayer");
+      throw new Error(
+        "Unexpected value for currentPlayer: ",
+        this.currentPlayer,
+      );
     }
   };
 
@@ -148,9 +142,27 @@ export class Application {
     if (this.inactivePlayer.gameBoard.allShipsSunk()) {
       return "game over";
     }
-    this.swapCurrentPlayer();
-    this.display.updateDisplay(this.currentPlayer);
     return result;
+  }
+
+  nextPlayer(result) {
+    this.updateSwapPlayersDialog(result);
+
+    setTimeout(() => {
+      this.dialogManager.showDialog("swap-players");
+      this.display.swapDisplay();
+    }, 700);
+  }
+
+  updateSwapPlayersDialog(result) {
+    this.dialogManager.swapPlayersOutput.classList.remove("hit");
+    this.dialogManager.swapPlayersOutput.innerHTML = `${result.coordinate.toText()}: ${result.result}`;
+    if (result.sunk) {
+      this.dialogManager.swapPlayersOutput.innerHTML += `<br>You sunk the ${this.shipDetails[result.sunk].name}`;
+    }
+    if (result.result === "hit") {
+      this.dialogManager.swapPlayersOutput.classList.add("hit");
+    }
   }
 
   swapCurrentPlayer() {
@@ -161,10 +173,11 @@ export class Application {
   }
 
   gameOver(winner) {
-    this.display.showGameOverDialog(
-      winner.toString() === "p1" ? "Player One" : "Player Two",
-    );
-    this.reset();
-    this.init(this.settings);
+    const winnerText = winner.toString() === "p1" ? "Player One" : "Player Two";
+    this.dialogManager.gameOverOutput.innerText = `${winnerText} wins!`;
+    this.dialogManager.gameOverButton.addEventListener("click", () => {
+      this.getPlayerChoices();
+    });
+    this.dialogManager.showDialog("game-over");
   }
 }

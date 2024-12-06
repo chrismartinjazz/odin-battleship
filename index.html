@@ -38,80 +38,32 @@
       </div>
     </div>
 
-    <dialog class="dialog-swap-players">
-      <h2 class="dialog-swap-players__title">Result of your shot:</h2>
-      <div class="dialog-swap-players__result"></div>
-      <div class="dialog-swap-players__text">
-        Pass the device to the next player...
-      </div>
-      <button class="dialog-swap-players__button">Continue</button>
-    </dialog>
-
-    <dialog class="dialog-game-over">
-      <h2 class="dialog-game-over__title">Game over!</h2>
-      <div class="dialog-game-over__result"></div>
-      <button class="dialog-game-over__button">New Game</button>
-    </dialog>
-
-    <dialog class="dialog-get-player-choices">
-      <h2>Battleship</h2>
-      <form novalidate action="#" method="get" class="form-get-player-choices">
-        <fieldset>
-          <div class="form-item-radio">
-            <div>
-              <p>Play against:</p>
-              <label for="opponentTypeComputer">
-                <input
-                  type="radio"
-                  id="opponentTypeComputer"
-                  name="opponentType"
-                  value="computer"
-                  checked
-                />
-                Computer
-              </label>
-              <label for="opponentTypeHuman">
-                <input
-                  type="radio"
-                  id="opponentTypeHuman"
-                  name="opponentType"
-                  value="human"
-                />
-                Human (two players on same device)
-              </label>
-            </div>
-          </div>
-          <div class="form-item-radio">
-            <div>
-              <p>Ship placement:</p>
-              <label for="shipPlacementRandom">
-                <input
-                  type="radio"
-                  id="shipPlacementRandom"
-                  name="shipPlacement"
-                  value="random"
-                  checked
-                />
-                Random
-              </label>
-              <label for="shipPlacementManual">
-                <input
-                  type="radio"
-                  id="shipPlacementManual"
-                  name="shipPlacement"
-                  value="manual"
-                />
-                Manual
-              </label>
-            </div>
-          </div>
-        </fieldset>
-        <div class="form-buttons">
-          <button type="submit" class="dialog-get-player-choices__button">
-            Start Game
-          </button>
+    <dialog class="dialog ship-placement">
+      <h2 class="ship-placement__title"></h2>
+      <div class="ship-placement__body">
+        <div class="ship-placement__ship-orientation">
+          <input
+            type="radio"
+            id="horizontal"
+            name="ship-orientation"
+            value="horizontal"
+            checked
+          />
+          <label for="horizontal">Horizontal</label>
+          <input
+            type="radio"
+            id="vertical"
+            name="ship-orientation"
+            value="vertical"
+          />
+          <label for="vertical">Vertical</label>
         </div>
-      </form>
+        <label for="horizontal"></label>
+        <div class="ship-placement__ships"></div>
+        <div class="ship-placement__board"></div>
+        <div class="ship-placement__message"></div>
+      </div>
+      <button class="ship-placement__button">Continue</button>
     </dialog>
 
     <script src="./scripts/main.js" type="module"></script>

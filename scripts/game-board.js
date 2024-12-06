@@ -9,6 +9,10 @@ export class GameBoard {
     this.shotsReceived = [];
   }
 
+  removeAllShips() {
+    this.ships = [];
+  }
+
   placeShip(startingCoordinate, directionVector, length) {
     const newShipCoordinates = generateCoordinateLine(
       startingCoordinate,
