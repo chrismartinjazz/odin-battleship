@@ -1,4 +1,4 @@
-import { makeElement } from "./helper-functions.js";
+import { makeElement } from "./display-helpers.js";
 
 export class Display {
   constructor(size, shipDetails, p1, p2) {

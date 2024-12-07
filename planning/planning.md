@@ -197,17 +197,19 @@ Either way a calcShipCoordinates method sounds useful.
   - DONE Priority 3
     - Randomly chosen coordinate from all remaining
     - Prefer targets with more 'space' around them (this simulates the final stages of 'looking for the patrol ship' - you want to go with squares that are not next to another square already shot at)
-- **Application sequence fix:**
+- DONE Application sequence fix:
   - DONE Computer win screen not broken
   - DONE Opening screen has options for:
     - 1-player or 2-player
     - Random ship placement
     - Manual ship placement
-  - **Player 1 / Player 2 win screen shows as a simple dialog with button to start a new game.**
-- Random ship placement adjusted to avoid placing ships next to other ships.
-- Styling:
-  - ships, hits, misses look more interesting
-  - Background, grid, dialogs
+  - DONE Player 1 / Player 2 win screen shows as a simple dialog with button to start a new game.
+- DECIDED AGAINST Random ship placement adjusted to avoid placing ships next to other ships.
+- DONE Styling:
+  - DONE ships, hits, misses look more interesting,  dialogs
+  - DECIDED AGAINST Background, grid images and textures
+
+## Dialog to open game:
 
 ```txt
   BATTLESHIP

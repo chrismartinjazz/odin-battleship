@@ -72,6 +72,20 @@ export class DialogManager {
     }
   }
 
+  addCloseListener(selector, action) {
+    const dialog = this.dialogs[selector];
+    if (dialog) {
+      dialog.addEventListener("close", action);
+    }
+  }
+
+  removeCloseListener(selector, action) {
+    const dialog = this.dialogs[selector];
+    if (dialog) {
+      dialog.removeEventListener("close", action);
+    }
+  }
+
   initializeDialogs() {
     // Remove all stored dialogs from the DOM if they exist.
     for (const entry of Object.entries(this.dialogs)) {

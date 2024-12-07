@@ -14,8 +14,11 @@ export class Application {
   constructor({ size, shipDetails }) {
     this.size = size;
     this.shipDetails = shipDetails;
-
     this.dialogManager = new DialogManager();
+
+    // Initialize the game in case the player closes out of the first dialog.
+    this.createPlayers("computer", "random");
+
     this.getPlayerChoices();
   }
 
@@ -39,6 +42,7 @@ export class Application {
     this.playerTwo = new Player(this.size, "p2", opponentType);
     this.currentPlayer = this.playerOne;
     this.inactivePlayer = this.playerTwo;
+    this.initializeRandomizeShipsButton();
     this.initializeDisplay(shipPlacement);
   }
 
@@ -50,7 +54,6 @@ export class Application {
       this.playerTwo,
     );
 
-    this.initializeRandomizeShipsButton();
     this.placeShips(shipPlacement);
   }
 
@@ -58,6 +61,7 @@ export class Application {
     if (shipPlacement === "random") {
       this.playerOne.placeShipsRandom(this.shipDetails);
       this.playerTwo.placeShipsRandom(this.shipDetails);
+      // Setup is complete - close dialog and start game loop
       this.display.updateDisplay(this.currentPlayer);
       this.setGameLoop();
     } else if (shipPlacement === "manual") {
@@ -65,9 +69,14 @@ export class Application {
 
       this.dialogManager.addClickListener("ship-placement-p1", () => {
         if (this.playerOne.gameBoard.ships.length === this.shipDetails.length) {
+          this.dialogManager.removeCloseListener(
+            "ship-placement-p1",
+            this.handleUserCloseDialog,
+          );
           this.dialogManager.closeDialog("ship-placement-p1");
           if (this.playerTwo.type === "computer") {
             this.playerTwo.placeShipsRandom(this.shipDetails);
+            // Setup is complete - close dialog and start game loop
             this.display.updateDisplay(this.currentPlayer);
             this.setGameLoop();
           } else if (this.playerTwo.type === "human") {
@@ -76,11 +85,24 @@ export class Application {
         }
       });
 
+      this.dialogManager.addCloseListener(
+        "ship-placement-p1",
+        this.handleUserCloseDialog,
+      );
       this.dialogManager.showDialog("ship-placement-p1");
     } else {
       throw new Error("Unexpected value for shipPlacement");
     }
   }
+
+  handleUserCloseDialog = () => {
+    if (this.playerOne.gameBoard.ships.length < this.shipDetails.length)
+      this.playerOne.placeShipsRandom(this.shipDetails);
+    if (this.playerTwo.gameBoard.ships.length < this.shipDetails.length)
+      this.playerTwo.placeShipsRandom(this.shipDetails);
+    this.display.updateDisplay(this.currentPlayer);
+    this.setGameLoop();
+  };
 
   setupShipPlacementDialog(player) {
     // Clear the playerBoard if it already exists
@@ -126,8 +148,17 @@ export class Application {
   }
 
   nextShipPlacement() {
+    this.dialogManager.addCloseListener(
+      "next-ship-placement",
+      this.handleUserCloseDialog,
+    );
     this.dialogManager.showDialog("next-ship-placement");
+
     this.dialogManager.addClickListener("next-ship-placement", () => {
+      this.dialogManager.removeCloseListener(
+        "next-ship-placement",
+        this.handleUserCloseDialog,
+      );
       this.dialogManager.closeDialog("next-ship-placement");
 
       // If player two has already placed ships, start the game.
@@ -146,11 +177,19 @@ export class Application {
 
     this.dialogManager.addClickListener("ship-placement-p2", () => {
       if (this.playerTwo.gameBoard.ships.length === this.shipDetails.length) {
+        this.dialogManager.removeCloseListener(
+          "ship-placement-p2",
+          this.handleUserCloseDialog,
+        );
         this.dialogManager.closeDialog("ship-placement-p2");
         this.dialogManager.showDialog("next-ship-placement");
       }
     });
 
+    this.dialogManager.addCloseListener(
+      "ship-placement-p2",
+      this.handleUserCloseDialog,
+    );
     this.dialogManager.showDialog("ship-placement-p2");
   }
 
