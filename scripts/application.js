@@ -97,6 +97,7 @@ export class Application {
     const shipPlacementPXBoard = document.querySelector(
       `.ship-placement-${player.toString()}__board`,
     );
+    shipPlacementPXBoard.classList.add("board");
     this.display.initializeBoard(
       shipPlacementPXBoard,
       `ship-placement-${player.toString()}__board`,

@@ -85,8 +85,8 @@ export const dialogTemplates = {
         <label for="vertical-p1">Vertical</label>
       </div>
       <label for="horizontal"></label>
-      <div class="ship-placement-p1__ships"></div>
-      <div class="ship-placement-p1__board"></div>
+      <ul class="ship-placement-p1__ships"></ul>
+      <div class="ship-placement-p1__board board"></div>
       <div class="ship-placement-p1__message"></div>`,
   "ship-placement-p2": `
       <div class="ship-placement-p2__ship-orientation">
@@ -107,7 +107,7 @@ export const dialogTemplates = {
         <label for="vertical-p2">Vertical</label>
       </div>
       <label for="horizontal"></label>
-      <div class="ship-placement-p2__ships"></div>
-      <div class="ship-placement-p2__board"></div>
+      <ul class="ship-placement-p2__ships"></ul>
+      <div class="ship-placement-p2__board board"></div>
       <div class="ship-placement-p2__message"></div>`,
 };

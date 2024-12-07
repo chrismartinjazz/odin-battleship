@@ -47,6 +47,12 @@ h1, h2, h3 {
   text-align: center;
 }
 
+button.randomize-ships {
+  margin: 0 auto;
+  padding: 0.5em 2em;
+  border-radius: 2em;
+}
+
 .cell {
   width: 1.5em;
   height: 1.5em;
@@ -55,18 +61,24 @@ h1, h2, h3 {
 
 .cell.hit {
   background-color: var(--color-hit);
+  border-radius: 50%;
 }
 
 .cell.miss {
   background-color: var(--color-light);
+  border-radius: 50%;
 }
 
 .cell.ship {
   background-color: var(--color-ship);
+  border: none;
+  border-radius: 0.3em;
 }
 
 .cell.ship.hit {
   background-color: var(--color-hit);
+  border: none;
+  border-radius: 0.3em;
 }
 
 .cell.ship.sunk, li.sunk {
@@ -86,10 +98,10 @@ ul {
 }
 
 li {
-  border: solid white 2px;
+  border: solid var(--color-light) 2px;
   border-radius: 1em;
   text-align: center;
-  padding: 0.3em 1em;
+  padding: 0.1em 0.8em;
 }
 
 .board {
@@ -97,7 +109,7 @@ li {
   display: grid;
   justify-content: center;
   line-height: 1.5em;
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 .btn.close-dialog {
@@ -115,6 +127,8 @@ li {
 }
 
 dialog {
+  text-align: center;
+  color: var(--color-dark);
   width: 80%;
   max-width: 800px;
   border: none;
@@ -149,12 +163,33 @@ dialog {
   }
 }
 
-.dialog-swap-players {
-  text-align: center;
-  color: var(--color-dark);
+fieldset {
+  border: none;
+  margin-bottom: 1em;
 }
 
-.dialog-swap-players__result {
+.ship-placement-p1__board, .ship-placement-p1__ships, .ship-placement-p2__board, .ship-placement-p2__ships {
+  background-color: var(--color-dark);
+  color: var(--color-light);
+}
+
+.ship-placement-p1__ships, .ship-placement-p2__ships {
+  padding: 1em 0 1em 0;
+  border-radius: 1em 1em 0 0;
+  margin-bottom: 0;
+}
+
+.ship-placement-p1__board, .ship-placement-p2__board {
+  padding: 0 0 2em 0;
+  border-radius: 0 0 1em 1em;
+  margin-bottom: 1em;
+}
+
+.drag-highlight {
+  background: var(--color-highlight);
+}
+
+.swap-players__output {
   font-size: 2rem;
   font-weight: bold;
   margin: 1em;
@@ -163,17 +198,22 @@ dialog {
   border-radius: 1em;
 }
 
-.dialog-swap-players__result.hit {
+.swap-players__output.hit {
   background-color: var(--color-hit);
   color: var(--color-highlight);
 }
 
-.dialog-swap-players__text {
+.swap-players__text {
   font-size: 1.5rem;
   font-style: italic;
   margin-bottom: 1em;
 }
 
-.dialog-swap-players__button {
+.swap-players__button {
   font-size: 1.5rem;
 }
+
+.game-over__output {
+  margin-bottom: 1em;
+}
+
