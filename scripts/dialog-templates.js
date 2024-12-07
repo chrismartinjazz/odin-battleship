@@ -57,6 +57,10 @@ export const dialogTemplates = {
           </button>
         </div>
       </form>`,
+  "next-ship-placement": `
+    <div class="next-ship-placement__text>
+      Pass the device to the next player...
+    </div>`,
   "swap-players": `
       <div class="swap-players__output"></div>
       <div class="swap-players__text">

@@ -47,7 +47,6 @@ export class Player {
 
         loopCount += 1;
       }
-      console.log(loopCount);
     }
   }
 }

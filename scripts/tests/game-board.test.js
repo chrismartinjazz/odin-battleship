@@ -12,20 +12,20 @@ describe("placeShip", () => {
   let expectedResult = [new Coordinate(0, 0), new Coordinate(0, 1)];
 
   it("can place a ship in the top corner", () => {
-    myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
+    myGameBoard.placeShip(4, new Coordinate(0, 0), new Coordinate(0, 1), 2);
     expect(myGameBoard.getCurrentShipCoordinates()).toEqual(expectedResult);
   });
 
   it("returns false if attempt to place a ship on same square", () => {
     expect(
-      myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(1, 0), 2),
+      myGameBoard.placeShip(4, new Coordinate(0, 0), new Coordinate(1, 0), 2),
     ).toBe(false);
     expect(myGameBoard.getCurrentShipCoordinates()).toEqual(expectedResult);
   });
 
   it("returns false if attempt to place a ship off the board", () => {
     expect(
-      myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, -1), 2),
+      myGameBoard.placeShip(4, new Coordinate(0, 0), new Coordinate(0, -1), 2),
     ).toBe(false);
     expect(myGameBoard.getCurrentShipCoordinates()).toEqual(expectedResult);
   });
@@ -51,11 +51,11 @@ describe("placeShip", () => {
       new Coordinate(8, 8),
       new Coordinate(8, 9),
     ];
-    myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 5);
-    myGameBoard.placeShip(new Coordinate(2, 3), new Coordinate(1, 0), 4);
-    myGameBoard.placeShip(new Coordinate(8, 4), new Coordinate(0, 1), 3);
-    myGameBoard.placeShip(new Coordinate(3, 8), new Coordinate(1, 0), 3);
-    myGameBoard.placeShip(new Coordinate(8, 8), new Coordinate(0, 1), 2);
+    myGameBoard.placeShip(0, new Coordinate(0, 0), new Coordinate(0, 1), 5);
+    myGameBoard.placeShip(1, new Coordinate(2, 3), new Coordinate(1, 0), 4);
+    myGameBoard.placeShip(2, new Coordinate(8, 4), new Coordinate(0, 1), 3);
+    myGameBoard.placeShip(3, new Coordinate(3, 8), new Coordinate(1, 0), 3);
+    myGameBoard.placeShip(4, new Coordinate(8, 8), new Coordinate(0, 1), 2);
     expect(myGameBoard.ships.length).toBe(5);
     expect(myGameBoard.getCurrentShipCoordinates()).toEqual(expectedResult);
   });
@@ -63,7 +63,7 @@ describe("placeShip", () => {
 
 describe("findShipAndIndex", () => {
   const myGameBoard = new GameBoard(10);
-  myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
+  myGameBoard.placeShip(4, new Coordinate(0, 0), new Coordinate(0, 1), 2);
   it("returns a ship when called with a valid coordinate", () => {
     expect(typeof myGameBoard.findShipAndIndex(new Coordinate(0, 0))).toBe(
       "object",
@@ -85,7 +85,7 @@ describe("coordinateList", () => {
 
 describe("receiveAttack", () => {
   const myGameBoard = new GameBoard(10);
-  myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
+  myGameBoard.placeShip(4, new Coordinate(0, 0), new Coordinate(0, 1), 2);
   // myGameBoard has 1 ship at (0, 0) and at (0, 1)
 
   it("returns result = 'hit' if the attack hit a ship", () => {
@@ -113,7 +113,7 @@ describe("receiveAttack", () => {
     expect(myGameBoard.ships[0].ship.hits).toBe(1);
   });
 
-  myGameBoard.placeShip(new Coordinate(1, 0), new Coordinate(0, 1), 2);
+  myGameBoard.placeShip(3, new Coordinate(1, 0), new Coordinate(0, 1), 3);
 
   it("sends a message to the correct ship when there is more that one ship", () => {
     myGameBoard.receiveAttack(new Coordinate(1, 1));
@@ -123,7 +123,7 @@ describe("receiveAttack", () => {
 
 describe("shipsSunk", () => {
   const myGameBoard = new GameBoard(10);
-  myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
+  myGameBoard.placeShip(4, new Coordinate(0, 0), new Coordinate(0, 1), 2);
 
   it("is 0 when no ships are sunk", () => {
     expect(myGameBoard.shipsSunk()).toBe(0);
@@ -147,7 +147,7 @@ describe("shipsSunk", () => {
 
 describe("allShipsSunk", () => {
   const myGameBoard = new GameBoard(10);
-  myGameBoard.placeShip(new Coordinate(0, 0), new Coordinate(0, 1), 2);
+  myGameBoard.placeShip(4, new Coordinate(0, 0), new Coordinate(0, 1), 2);
 
   it("is false initially", () => {
     expect(myGameBoard.allShipsSunk()).toBe(false);
@@ -158,7 +158,7 @@ describe("allShipsSunk", () => {
     expect(myGameBoard.allShipsSunk()).toBe(false);
   });
 
-  it("if true if all ships have been sunk", () => {
+  it("is true if all ships have been sunk", () => {
     myGameBoard.receiveAttack(new Coordinate(0, 1));
     expect(myGameBoard.allShipsSunk()).toBe(true);
   });

@@ -4,10 +4,6 @@ export class DialogManager {
   constructor() {
     this.dialogs = {};
     this.initializeDialogs();
-
-    this.swapPlayersOutput = document.querySelector(".swap-players__output");
-    this.gameOverOutput = document.querySelector(".game-over__output");
-    this.gameOverButton = document.querySelector(".game-over__button");
   }
 
   createDialog({ selector, header, innerHTML, buttons = [] }) {
@@ -89,6 +85,12 @@ export class DialogManager {
     });
 
     this.createDialog({
+      selector: "next-ship-placement",
+      header: "Swap Players",
+      buttons: [{ text: "Continue" }],
+    });
+
+    this.createDialog({
       selector: "swap-players",
       header: "Result of your shot:",
       buttons: [
@@ -126,5 +128,13 @@ export class DialogManager {
       header: "Player Two",
       buttons: [{ text: "Continue" }],
     });
+
+    this.initializeVariables();
+  }
+
+  initializeVariables() {
+    this.swapPlayersOutput = document.querySelector(".swap-players__output");
+    this.gameOverOutput = document.querySelector(".game-over__output");
+    this.gameOverButton = document.querySelector(".game-over__button");
   }
 }

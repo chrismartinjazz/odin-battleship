@@ -55,49 +55,13 @@ export class Application {
   }
 
   placeShips(shipPlacement) {
-    console.log(shipPlacement);
     if (shipPlacement === "random") {
       this.playerOne.placeShipsRandom(this.shipDetails);
       this.playerTwo.placeShipsRandom(this.shipDetails);
       this.display.updateDisplay(this.currentPlayer);
       this.setGameLoop();
     } else if (shipPlacement === "manual") {
-      // Clear the playerBoard if it already exists
-      const existingBoard = document.querySelector(".ship-placement-p1__board");
-      console.log(existingBoard);
-      if (existingBoard) this.display.clearBoard(existingBoard, "cell");
-
-      // Procedurally construct the ships and board in the ship placement dialog
-      const shipPlacementP1Ships = document.querySelector(
-        ".ship-placement-p1__ships",
-      );
-      this.display.initializeShips(shipPlacementP1Ships, true);
-      const shipPlacementP1Board = document.querySelector(
-        ".ship-placement-p1__board",
-      );
-      this.display.initializeBoard(
-        shipPlacementP1Board,
-        "ship-placement-p1__board",
-        "cell clickable",
-      );
-
-      // Add dragging functionality to p1 board
-      this.playerOne.gameBoard.removeAllShips();
-      shipPlacementP1Board.addEventListener("dragover", dragAllowDrop);
-      shipPlacementP1Board.addEventListener("dragenter", dragEnter);
-      shipPlacementP1Board.addEventListener("dragleave", dragLeave);
-      const dragDropHandler = createDragDropHandler(
-        this.playerOne,
-        this.shipDetails,
-        this.display,
-        "ship-placement-p1__board",
-      );
-      shipPlacementP1Board.addEventListener("drop", dragDropHandler);
-
-      const shipListItems = document.querySelectorAll("li[draggable=true]");
-      for (const ship of shipListItems) {
-        ship.addEventListener("dragstart", drag);
-      }
+      this.setupShipPlacementDialog(this.playerOne);
 
       this.dialogManager.addClickListener("ship-placement-p1", () => {
         if (this.playerOne.gameBoard.ships.length === this.shipDetails.length) {
@@ -106,33 +70,86 @@ export class Application {
             this.playerTwo.placeShipsRandom(this.shipDetails);
             this.display.updateDisplay(this.currentPlayer);
             this.setGameLoop();
+          } else if (this.playerTwo.type === "human") {
+            this.nextShipPlacement();
           }
-          console.log(this.playerOne.gameBoard.ships);
         }
       });
 
       this.dialogManager.showDialog("ship-placement-p1");
+    } else {
+      throw new Error("Unexpected value for shipPlacement");
+    }
+  }
 
-      // TODO add place ships manually
-      /*
-      
-      Add event listener to the submit button:
-        Close the dialog
-        If the next player is computer
-          Begin the game (continue)
-        If the next player is human
-          Create a new dialog, for Player 2
-          Show dialog
-          Add event listener to the board:
-            Place a ship with playerOne, checking for validity
-          Add event listener to the submit button:
-            Close the dialog
-            Begin the game
-      */
+  setupShipPlacementDialog(player) {
+    // Clear the playerBoard if it already exists
+    const existingBoard = document.querySelector(
+      `.ship-placement-${player.toString()}__board`,
+    );
+    if (existingBoard) this.display.clearBoard(existingBoard, "cell");
 
-      this.display.updateDisplay(this.currentPlayer);
-      this.setGameLoop();
-    } else console.log("Unexpected value for shipPlacement");
+    // Procedurally construct the ships and board in the ship placement dialog
+    const shipPlacementPXShips = document.querySelector(
+      `.ship-placement-${player.toString()}__ships`,
+    );
+    this.display.initializeShips(shipPlacementPXShips, true);
+    const shipPlacementPXBoard = document.querySelector(
+      `.ship-placement-${player.toString()}__board`,
+    );
+    this.display.initializeBoard(
+      shipPlacementPXBoard,
+      `ship-placement-${player.toString()}__board`,
+      "cell clickable",
+    );
+
+    // Add dragging functionality to board
+    player.gameBoard.removeAllShips();
+    shipPlacementPXBoard.addEventListener("dragover", dragAllowDrop);
+    shipPlacementPXBoard.addEventListener("dragenter", dragEnter);
+    shipPlacementPXBoard.addEventListener("dragleave", dragLeave);
+    const dragDropHandler = createDragDropHandler(
+      player,
+      this.shipDetails,
+      this.display,
+      `ship-placement-${player.toString()}__board`,
+    );
+    shipPlacementPXBoard.addEventListener("drop", dragDropHandler);
+
+    const shipListItems =
+      shipPlacementPXShips.querySelectorAll("li[draggable=true]");
+    for (const ship of shipListItems) {
+      ship.addEventListener("dragstart", drag);
+    }
+  }
+
+  nextShipPlacement() {
+    this.dialogManager.showDialog("next-ship-placement");
+    this.dialogManager.addClickListener("next-ship-placement", () => {
+      this.dialogManager.closeDialog("next-ship-placement");
+
+      // If player two has already placed ships, start the game.
+      // Otherwise, proceed to place ships for player two.
+      if (this.playerTwo.gameBoard.ships.length === 5) {
+        this.display.updateDisplay(this.currentPlayer);
+        this.setGameLoop();
+      } else {
+        this.placeShipsPlayerTwo();
+      }
+    });
+  }
+
+  placeShipsPlayerTwo() {
+    this.setupShipPlacementDialog(this.playerTwo);
+
+    this.dialogManager.addClickListener("ship-placement-p2", () => {
+      if (this.playerTwo.gameBoard.ships.length === this.shipDetails.length) {
+        this.dialogManager.closeDialog("ship-placement-p2");
+        this.dialogManager.showDialog("next-ship-placement");
+      }
+    });
+
+    this.dialogManager.showDialog("ship-placement-p2");
   }
 
   initializeRandomizeShipsButton() {
